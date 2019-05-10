@@ -7,6 +7,8 @@ class IsoField {
     private final int minLength;
     private final int maxLength;
     private final int lengthQualifier;
+    private boolean isPadded = false;
+    private char paddingChar;
     private String value;
 
     IsoField(int id,
@@ -26,6 +28,24 @@ class IsoField {
         this(id, name, length);
         this.value = value;
     }    
+    
+    IsoField(int id,
+            String name,
+            int length,
+            char paddingChar) {
+        this(id, name, length);
+        this.isPadded = true;
+        this.paddingChar = paddingChar;
+    }
+
+    IsoField(int id,
+            String name,
+            int length,
+            char paddingChar, 
+            String value) {
+        this(id, name, length, paddingChar);
+        this.value = value;
+    }
     
     IsoField(int id, 
             String name, 
@@ -75,6 +95,14 @@ class IsoField {
 
     int getLengthQualifier() {
         return lengthQualifier;
+    }
+    
+    boolean isPadded () {
+        return this.isPadded;
+    }
+    
+    char getPaddingChart () {
+        return this.paddingChar;
     }
 
     String getValue() {

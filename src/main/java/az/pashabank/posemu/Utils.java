@@ -68,4 +68,34 @@ public class Utils {
         }
         return s;
     }    
+    
+    static String padLeft (int i, char c, int length) {
+        return padLeft(Integer.toString(i), c, length);
+    }
+    
+    static String padLeft (String str, char c, int length) {
+        if (str.length() >= length) {
+            return str;
+        }
+        StringBuilder sb = new StringBuilder(str);
+        while (str.length() < length) {
+            sb.insert(0, c);
+        }
+        return sb.toString();
+    }
+    
+    static String padRight (int i, char c, int length) {
+        return padRight(Integer.toString(i), c, length);
+    }
+    
+    static String padRight (String str, char c, int length) {
+        if (str.length() >= length) {
+            return str;
+        }
+        StringBuilder sb = new StringBuilder(str);
+        while (str.length() < length) {
+            sb.append(c);
+        }
+        return sb.toString();
+    }
 }
