@@ -69,19 +69,19 @@ class Crypto {
         }
     }
     
-    static String encrypt3Des (String key, String plainData, EncryptionMode mode, PaddingMethod padding) 
+    static String encrypt3Des (TripleDesKey key, String plainData, EncryptionMode mode, PaddingMethod padding) 
             throws Exception {
-        return Utils.byteArrayToHexString(encrypt3Des(Utils.hexStringToByteArray(key), 
+        return Utils.byteArrayToHexString(encrypt3DesInternal(key.getEncoded(), 
                 Utils.hexStringToByteArray(plainData), mode, padding));
     }
     
-    static String generateKeyCheckValue (String key) 
+    static String generateKeyCheckValue (TripleDesKey key) 
             throws Exception {
-        return Utils.byteArrayToHexString(encrypt3Des(Utils.hexStringToByteArray(key), 
+        return Utils.byteArrayToHexString(encrypt3DesInternal(key.getEncoded(), 
                 ZEROES, EncryptionMode.ECB, PaddingMethod.NO_PADDING)).substring(0, 6);
     }
     
-    private static byte[] encrypt3Des (byte[] key, byte[] plainData, EncryptionMode mode, PaddingMethod padding) 
+    private static byte[] encrypt3DesInternal (byte[] key, byte[] plainData, EncryptionMode mode, PaddingMethod padding) 
             throws Exception {
         byte[] encData = null;
         try {
@@ -99,9 +99,8 @@ class Crypto {
         return encData;
     }
     
-    static String generate3DesKey (DesKeyLength keyLength) throws Exception {
-        String key = Utils.byteArrayToHexString(generate3DesKeyInternal(keyLength));
-        return key.substring(0, keyLength.getStringLength());
+    static TripleDesKey generate3DesKey (DesKeyLength keyLength) throws Exception {
+        return new TripleDesKey(generate3DesKeyInternal(keyLength)); 
     }
     
     private static byte[] generate3DesKeyInternal (DesKeyLength keyLength) throws Exception {

@@ -363,61 +363,44 @@
                           <Component id="lbMacKey" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="tfMasterKey" pref="363" max="32767" attributes="0"/>
-                                  <Component id="tfMacKey" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="cbMasterKeyIsUsed" min="-2" pref="28" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="tfMasterKeyCheckValue" min="-2" pref="99" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                                      <Component id="cbMacKeyIsUsed" min="-2" pref="28" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="tfMacKeyCheckValue" min="-2" pref="99" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="tfMasterKey" alignment="0" pref="296" max="32767" attributes="0"/>
+                          <Component id="tfMacKey" alignment="0" max="32767" attributes="0"/>
+                          <Component id="tfPinKey" alignment="0" max="32767" attributes="0"/>
+                          <Component id="tfEncryptionKey" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="cbMasterKeyIsUsed" min="-2" pref="28" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                                      <Component id="btGenerateMasterKey" pref="157" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Component id="btGenerateMacKey" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="tfMasterKeyCheckValue" pref="91" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="tfPinKey" max="32767" attributes="0"/>
-                                  <Component id="tfEncryptionKey" max="32767" attributes="0"/>
-                              </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="cbMacKeyIsUsed" min="-2" pref="28" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
+                              <Component id="tfMacKeyCheckValue" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="cbPinKeyIsUsed" min="-2" pref="28" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="tfPinKeyCheckValue" min="-2" pref="99" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="cbEncryptionKeyIsUsed" min="-2" pref="28" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="tfEncryptionKeyCheckValue" min="-2" pref="99" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="cbPinKeyIsUsed" min="-2" pref="28" max="-2" attributes="0"/>
+                                  <Component id="cbEncryptionKeyIsUsed" min="-2" pref="28" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="btGenerateEncryptionKey" pref="163" max="32767" attributes="0"/>
-                                  <Component id="btGeneratePinKey" max="32767" attributes="0"/>
+                                  <Component id="tfPinKeyCheckValue" pref="91" max="32767" attributes="0"/>
+                                  <Component id="tfEncryptionKeyCheckValue" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="btGeneratePinKey" pref="163" max="32767" attributes="0"/>
+                          <Component id="btGenerateEncryptionKey" pref="163" max="32767" attributes="0"/>
+                          <Component id="btGenerateMacKey" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btGenerateMasterKey" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="81" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -442,39 +425,44 @@
                               <Component id="lbEncryptionKey" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="tfEncryptionKey" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cbEncryptionKeyIsUsed" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="tfEncryptionKeyCheckValue" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="btGenerateEncryptionKey" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="cbEncryptionKeyIsUsed" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="lbMacKey" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="tfMacKey" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="cbMacKeyIsUsed" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="tfMasterKey" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lbMasterKey" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
-                                      <Component id="btGenerateMasterKey" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="tfMasterKeyCheckValue" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="cbMasterKeyIsUsed" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                              <Component id="lbMacKey" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="tfMacKey" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="cbMacKeyIsUsed" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="tfMacKeyCheckValue" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="btGenerateMacKey" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="169" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="cbMasterKeyIsUsed" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="tfMasterKeyCheckValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btGenerateMasterKey" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="52" pref="165" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="tfMasterKey" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbMasterKey" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
               </Group>
             </DimensionLayout>
