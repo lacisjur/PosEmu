@@ -11,6 +11,7 @@ public class FramePosEmu extends javax.swing.JFrame {
     
     public FramePosEmu() {
         initComponents();
+        screenClear ();
     }
 
     @SuppressWarnings("unchecked")
@@ -42,7 +43,6 @@ public class FramePosEmu extends javax.swing.JFrame {
         miIsoMessgaeFIelds = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
 
         taDisplay.setEditable(false);
         taDisplay.setBackground(new java.awt.Color(204, 255, 255));
@@ -133,6 +133,11 @@ public class FramePosEmu extends javax.swing.JFrame {
 
         btSharp.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
         btSharp.setText("#");
+        btSharp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSharpActionPerformed(evt);
+            }
+        });
 
         btAsterix.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
         btAsterix.setText("*");
@@ -140,6 +145,11 @@ public class FramePosEmu extends javax.swing.JFrame {
         btCancel.setBackground(new java.awt.Color(255, 0, 0));
         btCancel.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
         btCancel.setText("X");
+        btCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancelActionPerformed(evt);
+            }
+        });
 
         btClear.setBackground(new java.awt.Color(255, 255, 0));
         btClear.setFont(new java.awt.Font("Courier New", Font.BOLD, 24));
@@ -149,6 +159,11 @@ public class FramePosEmu extends javax.swing.JFrame {
         btClear1.setBackground(new java.awt.Color(51, 255, 0));
         btClear1.setFont(new java.awt.Font("Courier New", 1, 18));
         btClear1.setText("\u21B5");
+        btClear1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClear1ActionPerformed(evt);
+            }
+        });
 
         jButton1.setBackground(new java.awt.Color(102, 102, 102));
         jButton1.setToolTipText("Swipe magnetic stripe");
@@ -275,14 +290,111 @@ public class FramePosEmu extends javax.swing.JFrame {
         }        
     }
     
-    private void numberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberButtonActionPerformed
+    
+     private PosState state = PosState.IDLE;
+     private String amount ="0.00";
+     private String pin ="............";
+     private String screenData="";
+
+     private String screenClear () {
+                   
+        // Variables setting to default value  
+        this.state = PosState.IDLE;
+        String amount ="0.00";
+        String pin ="............";         
+         
         
+        String screenData = "\n\n\n\n\n\n\n\n\n      Welcome to POS Emulator 1.0\n\n Please fell free to use this device\n         as real POS terminal";
+        this.taDisplay.setText(screenData);
+        return null;
+    }
+     
+     
+     
+    private String screenEnterPin () {
+        String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n      Please enter PIN code:\n\n        " + pin;
+        this.taDisplay.setText(screenData);
+        return null;
+    }
+    
+      
+    private String screenChooseTrn () {
+        String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please choose Transaction type:\n\n        1. Sales\n        2. Refund\n        3. Close POS day";
+        this.taDisplay.setText(screenData);
+        return null;
+    }  
+     
+    
+    private String enterAmount () {
+        String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             "+amount;
+        this.taDisplay.setText(screenData);
+        return null;
+    }
+    
+    
+    private void nextState () {
+        this.state = this.state.nextState();
+        switch (this.state) {
+            case ENTER_PIN: 
+                screenEnterPin();
+                break;
+        }
+    }
+    
+    
+    private void numberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberButtonActionPerformed
+       
+        //this.taDisplay.append(evt.getActionCommand());
+        
+                
+        if (this.state == PosState.CHOOSE_TRN) {            
+            switch (evt.getActionCommand())
+            {
+                case "1": this.state=this.state.nextState(); enterAmount (); break;
+                case "2": System.out.println("2 option is choosed"); break;
+                case "3": System.out.println("3 option is choosed"); break;
+            }                                            
+        }
+
+
+        if (this.state == PosState.ENTER_AMT) {     
+            
+            //if amount.
+        
+            
+        screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             "+amount;
+        this.taDisplay.setText(screenData);                        
+        }
     }//GEN-LAST:event_numberButtonActionPerformed
 
     private void miParametersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miParametersActionPerformed
         DialogParameters dlg = new DialogParameters(this, true);
         dlg.setVisible(true);
     }//GEN-LAST:event_miParametersActionPerformed
+
+    private void btClear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClear1ActionPerformed
+        // TODO add your handling code here:
+        
+         if (this.state == PosState.IDLE) {
+          
+          this.state=this.state.nextState();
+          this.state=this.state.nextState();
+          screenChooseTrn ();
+        }
+         //screenEnterPin();
+    }//GEN-LAST:event_btClear1ActionPerformed
+
+    private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
+        // TODO add your handling code here:
+        screenClear ();
+    }//GEN-LAST:event_btCancelActionPerformed
+
+    private void btSharpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSharpActionPerformed
+        // TODO add your handling code here:
+        if (this.state == PosState.IDLE) {
+            System.out.println("Other menu");
+        }        
+    }//GEN-LAST:event_btSharpActionPerformed
 
     public static void main(String args[]) {
         try {
