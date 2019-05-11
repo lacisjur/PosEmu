@@ -348,6 +348,8 @@ public class FramePosEmu extends javax.swing.JFrame {
 
     private void numberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberButtonActionPerformed
 
+        System.out.println("numberButtonActionPerformed ");
+        
         //this.taDisplay.append(evt.getActionCommand());
         switch (this.state) {
             
