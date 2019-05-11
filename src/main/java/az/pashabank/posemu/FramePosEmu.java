@@ -8,10 +8,10 @@ import javax.swing.JOptionPane;
 public class FramePosEmu extends javax.swing.JFrame {
 
     private Database db;
-    
+
     public FramePosEmu() {
         initComponents();
-        screenClear ();
+        screenClear();
     }
 
     @SuppressWarnings("unchecked")
@@ -155,6 +155,11 @@ public class FramePosEmu extends javax.swing.JFrame {
         btClear.setFont(new java.awt.Font("Courier New", Font.BOLD, 24));
         btClear.setText("\u2190");
         btClear.setToolTipText("");
+        btClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearActionPerformed(evt);
+            }
+        });
 
         btClear1.setBackground(new java.awt.Color(51, 255, 0));
         btClear1.setFont(new java.awt.Font("Courier New", 1, 18));
@@ -272,7 +277,7 @@ public class FramePosEmu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void run (String dbfFile) {
+    private void run(String dbfFile) {
         db = Database.getInstance();
         try {
             db.connect();
@@ -287,83 +292,121 @@ public class FramePosEmu extends javax.swing.JFrame {
             } catch (SQLException e2) {
                 JOptionPane.showMessageDialog(this, "Error occured while closing databaseL " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }        
+        }
     }
-    
-    
-     private PosState state = PosState.IDLE;
-     private String amount ="0.00";
-     private String pin ="............";
-     private String screenData="";
 
-     private String screenClear () {
-                   
+    private PosState state = PosState.IDLE;
+    private String amount = "";
+    private String pin = "............";
+    private String screenData = "";  
+    private double amt = 0.0;
+    private boolean digit=true;
+
+    private String screenClear() {
+
         // Variables setting to default value  
         this.state = PosState.IDLE;
-        String amount ="0.00";
-        String pin ="............";         
-         
+        String amount = "0.00";
+        String pin = "............";
+       
         
+        //amt=0.00;
+
         String screenData = "\n\n\n\n\n\n\n\n\n      Welcome to POS Emulator 1.0\n\n Please fell free to use this device\n         as real POS terminal";
         this.taDisplay.setText(screenData);
         return null;
     }
-     
-     
-     
-    private String screenEnterPin () {
+
+    private String screenEnterPin() {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n      Please enter PIN code:\n\n        " + pin;
         this.taDisplay.setText(screenData);
         return null;
     }
-    
-      
-    private String screenChooseTrn () {
+
+    private String screenChooseTrn() {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please choose Transaction type:\n\n        1. Sales\n        2. Refund\n        3. Close POS day";
         this.taDisplay.setText(screenData);
         return null;
-    }  
-     
-    
-    private String enterAmount () {
-        String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             "+amount;
-        this.taDisplay.setText(screenData);
+    }
+
+    private String enterAmount() {
+               
+        String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amount;
+        this.taDisplay.setText(screenData);      
         return null;
     }
-    
-    
-    private void nextState () {
+
+    private void nextState() {
         this.state = this.state.nextState();
         switch (this.state) {
-            case ENTER_PIN: 
+            case ENTER_PIN:
                 screenEnterPin();
                 break;
         }
     }
-    
-    
+
+
     private void numberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberButtonActionPerformed
-       
+
+        System.out.println("numberButtonActionPerformed ");
+        
         //this.taDisplay.append(evt.getActionCommand());
-        
-                
-        if (this.state == PosState.CHOOSE_TRN) {            
-            switch (evt.getActionCommand())
-            {
-                case "1": this.state=this.state.nextState(); enterAmount (); break;
-                case "2": System.out.println("2 option is choosed"); break;
-                case "3": System.out.println("3 option is choosed"); break;
-            }                                            
-        }
-
-
-        if (this.state == PosState.ENTER_AMT) {     
+        switch (this.state) {
             
-            //if amount.
         
-            
-        screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             "+amount;
-        this.taDisplay.setText(screenData);                        
+            case CHOOSE_TRN:
+                switch (evt.getActionCommand()) {
+                    case "1":
+                        this.state = this.state.nextState();
+                        enterAmount();                    
+                        break;
+                    case "2":
+                        System.out.println("2 option is choosed");
+                        break;
+                    case "3":
+                        System.out.println("3 option is choosed");
+                        break;
+                }
+                this.state = PosState.ENTER_AMT;
+                break;
+            case ENTER_AMT:
+                String amountStr = input.add(evt.getActionCommand());
+                screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amountStr;
+                this.taDisplay.setText(screenData);
+                break;
+                /*
+                if (digit) {
+
+                 screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             0.00";
+                 this.taDisplay.setText(screenData);  
+
+                 digit=false;  
+                }
+                else 
+                {
+
+                if (amount.length()<13)
+                {                                                    
+                //if amount.    
+                if (amount.length() < 4) {                  
+                    amount = amount + evt.getActionCommand();
+                    amt = Double.parseDouble(amount) / 100;             
+                    screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amt;
+                    this.taDisplay.setText(screenData);                
+                }
+                else
+                {
+                    amount = amount + evt.getActionCommand();                                
+                    amount=amount.replaceAll("[^0-9]","");              
+                    amount = amount.substring(0, amount.length()-2) + "." + amount.substring((amount.length()-2), amount.length());                                                
+                    screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amount;
+                    this.taDisplay.setText(screenData);
+                }
+
+                }            
+                }
+                */
+
         }
     }//GEN-LAST:event_numberButtonActionPerformed
 
@@ -374,27 +417,77 @@ public class FramePosEmu extends javax.swing.JFrame {
 
     private void btClear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClear1ActionPerformed
         // TODO add your handling code here:
-        
-         if (this.state == PosState.IDLE) {
-          
-          this.state=this.state.nextState();
-          this.state=this.state.nextState();
-          screenChooseTrn ();
+
+        if (this.state == PosState.IDLE) {
+
+            this.state = this.state.nextState();
+            this.state = this.state.nextState();
+            screenChooseTrn();
         }
-         //screenEnterPin();
+        //screenEnterPin();
     }//GEN-LAST:event_btClear1ActionPerformed
 
     private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
         // TODO add your handling code here:
-        screenClear ();
+        screenClear();
     }//GEN-LAST:event_btCancelActionPerformed
 
     private void btSharpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSharpActionPerformed
         // TODO add your handling code here:
         if (this.state == PosState.IDLE) {
             System.out.println("Other menu");
-        }        
+        }
     }//GEN-LAST:event_btSharpActionPerformed
+
+    AmountInput input = new AmountInput();
+    
+    private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
+        // TODO add your handling code here:
+        
+       if (this.state == PosState.ENTER_AMT) {
+           String amountStr = input.backspace();
+           screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amountStr;
+           this.taDisplay.setText(screenData);  
+           
+           
+           
+           
+           
+           /*
+           if (!digit)
+           {
+               
+                if (amount.length() < 7) {     
+                 
+             //amount =  amount.replaceAll("[^0-9]","");         
+            // amount = amount.substring(0, amount.length()-1); 
+
+            System.out.println("amount="+amount);
+            
+            double d=Double.valueOf(amount);        
+            amount=String.valueOf(d/1000);
+            amount = amount.substring(0, amount.length()-1);
+                                                 
+            screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amount;
+            this.taDisplay.setText(screenData); 
+            
+            amount=String.valueOf(Double.valueOf(amount)*100);
+            
+            }
+            else
+            {
+                amount = amount + evt.getActionCommand();                                
+                amount=amount.replaceAll("[^0-9]","");              
+                amount = amount.substring(0, amount.length()-2) + "." + amount.substring((amount.length()-2), amount.length());                                                
+                screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amount;
+                this.taDisplay.setText(screenData);
+            }
+               
+               
+           }  
+*/
+       } 
+    }//GEN-LAST:event_btClearActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -415,18 +508,18 @@ public class FramePosEmu extends javax.swing.JFrame {
         }
 
         FramePosEmu frame = new FramePosEmu();
-        
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 frame.setVisible(true);
             }
         });
-        
+
         String dbfFile = null;
         if (args.length > 0) {
             dbfFile = args[0];
         }
-        
+
         frame.run(dbfFile);
     }
 
