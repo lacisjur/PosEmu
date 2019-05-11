@@ -22,18 +22,22 @@ public class DialogParameters extends javax.swing.JDialog {
             this.tfAcqHostTimeout.setText(db.getParameter(Constants.PARAM_ACQ_HOST_TIMEOUT));
             this.tfTerminalId.setText(db.getParameter(Constants.PARAM_TERMINAL_ID));
             this.tfMerchantId.setText(db.getParameter(Constants.PARAM_TERMINAL_MERCHANT_ID));
-            this.tfPinKey.setText(db.getParameter(Constants.PARAM_PIN_KEY));
+            this.tfPinKey.setText(new TripleDesKey(db.getParameter(Constants.PARAM_PIN_KEY)).toString());
             this.cbPinKeyIsUsed.setSelected(db.getBooleanParameter(Constants.PARAM_PIN_KEY_IS_USED));
             this.tfPinKey.setEnabled(this.cbPinKeyIsUsed.isSelected());
-            this.tfEncryptionKey.setText(db.getParameter(Constants.PARAM_ENCRYPTION_KEY));
+            this.btGeneratePinKey.setEnabled(this.cbPinKeyIsUsed.isSelected());
+            this.tfEncryptionKey.setText(new TripleDesKey(db.getParameter(Constants.PARAM_ENCRYPTION_KEY)).toString());
             this.cbEncryptionKeyIsUsed.setSelected(db.getBooleanParameter(Constants.PARAM_ENCRYPTION_KEY_IS_USED));
             this.tfEncryptionKey.setEnabled(this.cbEncryptionKeyIsUsed.isSelected());
-            this.tfMacKey.setText(db.getParameter(Constants.PARAM_MAC_KEY));
+            this.btGenerateEncryptionKey.setEnabled(this.cbEncryptionKeyIsUsed.isSelected());
+            this.tfMacKey.setText(new TripleDesKey(db.getParameter(Constants.PARAM_MAC_KEY)).toString());
             this.cbMacKeyIsUsed.setSelected(db.getBooleanParameter(Constants.PARAM_MAC_KEY_IS_USED));
             this.tfMacKey.setEnabled(this.cbMacKeyIsUsed.isSelected());
-            this.tfMasterKey.setText(db.getParameter(Constants.PARAM_MASTER_KEY));
+            this.btGenerateMacKey.setEnabled(this.cbMacKeyIsUsed.isSelected());
+            this.tfMasterKey.setText(new TripleDesKey(db.getParameter(Constants.PARAM_MASTER_KEY)).toString());
             this.cbMasterKeyIsUsed.setSelected(db.getBooleanParameter(Constants.PARAM_MASTER_KEY_IS_USED));
             this.tfMasterKey.setEnabled(this.cbMasterKeyIsUsed.isSelected());
+            this.btGenerateMasterKey.setEnabled(this.cbMasterKeyIsUsed.isSelected());
             List<Currency> currencies = db.getCurrencies();
             List<String> columns = new ArrayList<>();
             columns.add("Numeric code");
@@ -380,7 +384,13 @@ public class DialogParameters extends javax.swing.JDialog {
                     .addComponent(lbPinKey, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lbMacKey, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(tfMasterKey, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+                    .addComponent(tfMacKey, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfPinKey, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfEncryptionKey, javax.swing.GroupLayout.Alignment.LEADING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pCryptographyLayout.createSequentialGroup()
                         .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tfMacKey, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
@@ -405,20 +415,22 @@ public class DialogParameters extends javax.swing.JDialog {
                             .addComponent(tfEncryptionKey, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                             .addComponent(tfPinKey))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfMacKeyCheckValue))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pCryptographyLayout.createSequentialGroup()
                         .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pCryptographyLayout.createSequentialGroup()
-                                .addComponent(cbPinKeyIsUsed, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tfPinKeyCheckValue, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pCryptographyLayout.createSequentialGroup()
-                                .addComponent(cbEncryptionKeyIsUsed, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tfEncryptionKeyCheckValue, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbPinKeyIsUsed, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbEncryptionKeyIsUsed, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btGeneratePinKey, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btGenerateEncryptionKey, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tfPinKeyCheckValue, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
+                            .addComponent(tfEncryptionKeyCheckValue))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btGeneratePinKey, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                    .addComponent(btGenerateEncryptionKey, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                    .addComponent(btGenerateMacKey, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btGenerateMasterKey, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
         pCryptographyLayout.setVerticalGroup(
             pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -437,6 +449,7 @@ public class DialogParameters extends javax.swing.JDialog {
                     .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lbEncryptionKey)
                         .addComponent(tfEncryptionKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbEncryptionKeyIsUsed)
                     .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(tfEncryptionKeyCheckValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btGenerateEncryptionKey))
@@ -453,14 +466,18 @@ public class DialogParameters extends javax.swing.JDialog {
                         .addComponent(btGenerateMacKey)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbMasterKeyIsUsed)
-                    .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tfMasterKeyCheckValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btGenerateMasterKey))
-                    .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(tfMasterKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lbMasterKey, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(186, Short.MAX_VALUE))
+                    .addGroup(pCryptographyLayout.createSequentialGroup()
+                        .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbMasterKeyIsUsed)
+                            .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(tfMasterKeyCheckValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btGenerateMasterKey)))
+                        .addGap(52, 165, Short.MAX_VALUE))
+                    .addGroup(pCryptographyLayout.createSequentialGroup()
+                        .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfMasterKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbMasterKey, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         tpParameters.addTab("Cryptography", pCryptography);
@@ -500,8 +517,8 @@ public class DialogParameters extends javax.swing.JDialog {
     private void setKey (String keyName, JTextField tfKey, JCheckBox cbIsUsed, JButton bGenerateKey, JTextField tfCheckValue) {
         tfKey.setEnabled(cbIsUsed.isSelected());
         bGenerateKey.setEnabled(cbIsUsed.isSelected());
-        String key = tfKey.getText();
-        if (!key.equals(Crypto.UNSET_KEY)) {
+        TripleDesKey key = new TripleDesKey(tfKey.getText());
+        if (!key.isUnset()) {
             try {
                 tfCheckValue.setText(Crypto.generateKeyCheckValue(key));
             } catch (Exception e) {
@@ -512,8 +529,8 @@ public class DialogParameters extends javax.swing.JDialog {
     
     private void generateKey (String name, JTextField tfKey, JTextField tfKeyCheckValue) {
         try {
-            String key = Crypto.generate3DesKey(Crypto.DesKeyLength.DOUBLE);
-            tfKey.setText(key);
+            TripleDesKey key = Crypto.generate3DesKey(Crypto.DesKeyLength.DOUBLE);
+            tfKey.setText(key.toString());
             String kcv = Crypto.generateKeyCheckValue(key);
             tfKeyCheckValue.setText(kcv);
         } catch (Exception e) {
