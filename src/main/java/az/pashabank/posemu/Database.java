@@ -53,6 +53,10 @@ class Database {
         return Boolean.parseBoolean(getParameter(parameter));
     }
     
+    int getIntParameter (String parameter) throws Exception {
+        return Integer.parseInt(getParameter(parameter));
+    }
+    
     String getParameter (String parameter) throws Exception {
         String sqlStr = "SELECT value FROM parameter WHERE name = ?";
         String value = null;
