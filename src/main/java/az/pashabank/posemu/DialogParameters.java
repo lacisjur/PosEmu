@@ -109,6 +109,11 @@ public class DialogParameters extends javax.swing.JDialog {
         setResizable(false);
 
         btOk.setText("OK");
+        btOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btOkActionPerformed(evt);
+            }
+        });
 
         pAcquirerHost.setBorder(javax.swing.BorderFactory.createTitledBorder("Acquirer host"));
 
@@ -464,6 +469,11 @@ public class DialogParameters extends javax.swing.JDialog {
         tpParameters.addTab("Cryptography", pCryptography);
 
         btCancel.setText("Cancel");
+        btCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -483,7 +493,7 @@ public class DialogParameters extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tpParameters, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+                .addComponent(tpParameters)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btCancel)
@@ -549,6 +559,23 @@ public class DialogParameters extends javax.swing.JDialog {
     private void btGenerateMasterKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGenerateMasterKeyActionPerformed
         generateKey("Master", this.tfMasterKey, this.tfMasterKeyCheckValue);
     }//GEN-LAST:event_btGenerateMasterKeyActionPerformed
+
+    private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
+        dispose();
+    }//GEN-LAST:event_btCancelActionPerformed
+
+    private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
+        try {
+            db.updateParameter(Constants.PARAM_ACQ_HOST_IP_ADDRESS, this.tfAcqHostIp.getText());
+            db.updateParameter(Constants.PARAM_ACQ_HOST_PORT, this.tfAcqHostPort.getText());
+            db.updateParameter(Constants.PARAM_ACQ_HOST_TIMEOUT, this.tfAcqHostTimeout.getText());
+            db.updateParameter(Constants.PARAM_TERMINAL_ID, this.tfTerminalId.getText());
+            db.updateParameter(Constants.PARAM_TERMINAL_MERCHANT_ID, this.tfMerchantId.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Failed to update parameters", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        dispose();
+    }//GEN-LAST:event_btOkActionPerformed
     
     public static void main(String args[]) {
         try {

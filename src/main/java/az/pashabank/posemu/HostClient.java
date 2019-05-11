@@ -53,4 +53,12 @@ class HostClient {
         return res;
     }
     
+    public static void main(String[] args) throws Exception {
+        String msg = "1200701405d820c00200165315357289693858000000000000001111160928192518161251010151334420020005166160928000375315357289693858D16122011985704200000POS0020";
+        HostClient c = HostClient.getInstance();
+        c.connect();
+        String response = c.send(msg);
+        c.disconnect();
+    }
+    
 }
