@@ -53,5 +53,11 @@ public class AmountInput {
     void reset () {
         this.amount = "0";
     }
+    
+    String getAmount()
+    {
+        return this.amount;
+    }
+    
 }
  

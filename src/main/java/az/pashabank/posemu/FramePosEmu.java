@@ -317,7 +317,7 @@ public class FramePosEmu extends javax.swing.JFrame {
     }
 
     private PosState state = PosState.IDLE;
-    private String amount = "";
+    private String amount = "0.00";
     private String pin = "............";
     private String screenData = "";  
     private double amt = 0.0;
@@ -329,7 +329,8 @@ public class FramePosEmu extends javax.swing.JFrame {
         this.state = PosState.IDLE;
         String amount = "0.00";
         String pin = "............";
-       
+        System.out.println("amount="+input.getAmount());
+        input.reset();
         
         //amt=0.00;
 
@@ -369,7 +370,7 @@ public class FramePosEmu extends javax.swing.JFrame {
 
     private void numberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberButtonActionPerformed
 
-        System.out.println("numberButtonActionPerformed ");
+        
         
         //this.taDisplay.append(evt.getActionCommand());
         switch (this.state) {
@@ -395,6 +396,12 @@ public class FramePosEmu extends javax.swing.JFrame {
                 screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amountStr;
                 this.taDisplay.setText(screenData);
                 break;
+                
+                
+                
+                
+                
+                
                 /*
                 if (digit) {
 
@@ -450,6 +457,7 @@ public class FramePosEmu extends javax.swing.JFrame {
 
     private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
         // TODO add your handling code here:
+        
         screenClear();
     }//GEN-LAST:event_btCancelActionPerformed
 
@@ -469,11 +477,7 @@ public class FramePosEmu extends javax.swing.JFrame {
            String amountStr = input.backspace();
            screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amountStr;
            this.taDisplay.setText(screenData);  
-           
-           
-           
-           
-           
+               
            /*
            if (!digit)
            {
