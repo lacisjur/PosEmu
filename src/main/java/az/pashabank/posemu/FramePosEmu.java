@@ -4,14 +4,19 @@ import java.awt.Font;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 
 public class FramePosEmu extends javax.swing.JFrame {
 
     private Database db;
+    //private final DialogEventLog dialogEventLog = new DialogEventLog(this, false);
+    private EventLog log;
 
     public FramePosEmu() {
         initComponents();
         screenClear();
+        //this.dialogEventLog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        log = EventLog.getInstance();
     }
 
     @SuppressWarnings("unchecked")
@@ -38,6 +43,7 @@ public class FramePosEmu extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        miEventLog = new javax.swing.JMenuItem();
         mPosEmu = new javax.swing.JMenu();
         miParameters = new javax.swing.JMenuItem();
         miIsoMessgaeFIelds = new javax.swing.JMenuItem();
@@ -174,6 +180,15 @@ public class FramePosEmu extends javax.swing.JFrame {
         jButton1.setToolTipText("Swipe magnetic stripe");
 
         jMenu1.setText("File");
+
+        miEventLog.setText("Event log");
+        miEventLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miEventLogActionPerformed(evt);
+            }
+        });
+        jMenu1.add(miEventLog);
+
         jMenuBar1.add(jMenu1);
 
         mPosEmu.setText("Edit");
@@ -187,6 +202,11 @@ public class FramePosEmu extends javax.swing.JFrame {
         mPosEmu.add(miParameters);
 
         miIsoMessgaeFIelds.setText("ISO8583 message fields");
+        miIsoMessgaeFIelds.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miIsoMessgaeFIeldsActionPerformed(evt);
+            }
+        });
         mPosEmu.add(miIsoMessgaeFIelds);
 
         jMenuBar1.add(mPosEmu);
@@ -277,7 +297,8 @@ public class FramePosEmu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void run(String dbfFile) {
+    private void run(String dbfFile, String logLevel) {
+        log.info("Starting simulator...");
         db = Database.getInstance();
         try {
             db.connect();
@@ -489,6 +510,26 @@ public class FramePosEmu extends javax.swing.JFrame {
        } 
     }//GEN-LAST:event_btClearActionPerformed
 
+    private void miIsoMessgaeFIeldsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miIsoMessgaeFIeldsActionPerformed
+        DialogIsoMessageFields dlg = new DialogIsoMessageFields(this, true);
+        dlg.setVisible(true);
+    }//GEN-LAST:event_miIsoMessgaeFIeldsActionPerformed
+
+    private void miEventLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEventLogActionPerformed
+        if (this.log.isVisible()) {
+            return;
+        }
+        this.log.setVisible(true);
+    }//GEN-LAST:event_miEventLogActionPerformed
+
+    private static void cryForHelp () {
+        System.out.println("Arguments:");
+        System.out.println("--help - displays help");
+        System.out.println("--dbf-file - database file to be used, if not provided, programm uses default");
+        System.out.println("--log-level - logging level, if not provided, logging level INFO is used. "
+                + "Allowed values: NONE, ERROR, WARNING, INFO, DEBUG");
+    }
+    
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -516,11 +557,20 @@ public class FramePosEmu extends javax.swing.JFrame {
         });
 
         String dbfFile = null;
-        if (args.length > 0) {
-            dbfFile = args[0];
+        String logLevel = null;
+        
+        for (int i = 0; i < args.length; i++){
+            if (args[i].equals("--help")) {
+                cryForHelp();
+            } else if (args[i].equals("--dbf-file")) {
+                dbfFile = args[i + 1];
+                i++;
+            } else if (args[i].equals("--log-level")) {
+                logLevel = args[i + 1];
+                i++;
+            }
         }
-
-        frame.run(dbfFile);
+        frame.run(dbfFile, logLevel);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -544,6 +594,7 @@ public class FramePosEmu extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenu mPosEmu;
+    private javax.swing.JMenuItem miEventLog;
     private javax.swing.JMenuItem miIsoMessgaeFIelds;
     private javax.swing.JMenuItem miParameters;
     private javax.swing.JTextArea taDisplay;

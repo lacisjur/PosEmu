@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="lbLengthQualifier" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="tfLengthQualifier" min="-2" pref="277" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lbFieldName" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbFieldMinLength" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbFieldId" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbFieldMaxLength" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="tfFieldMaxLength" alignment="1" min="-2" pref="277" max="-2" attributes="0"/>
+                                  <Component id="tfFieldMinLength" alignment="1" min="-2" pref="277" max="-2" attributes="0"/>
+                                  <Component id="tfFieldName" alignment="1" min="-2" pref="277" max="-2" attributes="0"/>
+                                  <Component id="tfFieldId" alignment="1" min="-2" pref="277" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lbFieldPaddingChar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="tfFieldPaddingChar" min="-2" pref="277" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tfFieldId" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbFieldId" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tfFieldName" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbFieldName" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lbFieldMinLength" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tfFieldMinLength" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tfFieldMaxLength" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbFieldMaxLength" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lbLengthQualifier" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tfLengthQualifier" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lbFieldPaddingChar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tfFieldPaddingChar" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="lbFieldMinLength">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Min length"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfLengthQualifier">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbLengthQualifier">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Length qualifier"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfFieldName">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbFieldName">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Name"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfFieldId">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbFieldId">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="ID"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfFieldMinLength">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbFieldMaxLength">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Max length"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfFieldMaxLength">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbFieldPaddingChar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Padding char"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfFieldPaddingChar">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+  </SubComponents>
+</Form>

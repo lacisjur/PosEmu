@@ -1,5 +1,8 @@
 package az.pashabank.posemu;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Utils {
 
     public byte[] xorByteArrays (byte[] ba1, byte[] ba2) {
@@ -97,5 +100,15 @@ public class Utils {
             sb.append(c);
         }
         return sb.toString();
+    }
+    
+    static String getDateTime () {
+       return getDateTime("yyyy-MM-dd HH-mm-ss");
+    }
+    
+    static String getDateTime (String format) {
+        Date date = new Date();
+        SimpleDateFormat fmt = new SimpleDateFormat(format);
+        return fmt.format(date);
     }
 }
