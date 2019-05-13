@@ -476,7 +476,7 @@ public class FramePosEmu extends javax.swing.JFrame {
         }                        
     }//GEN-LAST:event_btClearActionPerformed
 
-<<<<<<< HEAD
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
@@ -486,7 +486,7 @@ public class FramePosEmu extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-=======
+
     private void miIsoMessgaeFIeldsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miIsoMessgaeFIeldsActionPerformed
         DialogIsoMessageFields dlg = new DialogIsoMessageFields(this, true);
         dlg.setVisible(true);
@@ -507,7 +507,7 @@ public class FramePosEmu extends javax.swing.JFrame {
                 + "Allowed values: NONE, ERROR, WARNING, INFO, DEBUG");
     }
     
->>>>>>> 4078fb01f33df1ad0f668131f900cf337d211fa3
+
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
