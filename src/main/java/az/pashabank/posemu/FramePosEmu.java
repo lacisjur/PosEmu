@@ -49,6 +49,7 @@ public class FramePosEmu extends javax.swing.JFrame {
         miParameters = new javax.swing.JMenuItem();
         miIsoMessgaeFIelds = new javax.swing.JMenuItem();
         mTools = new javax.swing.JMenu();
+        miCards = new javax.swing.JMenuItem();
         miCardKeys = new javax.swing.JMenuItem();
         miCardGenerator = new javax.swing.JMenuItem();
 
@@ -224,6 +225,14 @@ public class FramePosEmu extends javax.swing.JFrame {
         jMenuBar1.add(mPosEmu);
 
         mTools.setText("Tools");
+
+        miCards.setText("Cards");
+        miCards.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCardsActionPerformed(evt);
+            }
+        });
+        mTools.add(miCards);
 
         miCardKeys.setText("Card keys");
         miCardKeys.addActionListener(new java.awt.event.ActionListener() {
@@ -535,6 +544,11 @@ public class FramePosEmu extends javax.swing.JFrame {
         dlg.setVisible(true);
     }//GEN-LAST:event_miCardKeysActionPerformed
 
+    private void miCardsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCardsActionPerformed
+        DialogCards dlg = new DialogCards(this, true);
+        dlg.setVisible(true);
+    }//GEN-LAST:event_miCardsActionPerformed
+
     private static void cryForHelp () {
         System.out.println("Arguments:");
         System.out.println("--help - displays help");
@@ -611,6 +625,7 @@ public class FramePosEmu extends javax.swing.JFrame {
     private javax.swing.JMenu mTools;
     private javax.swing.JMenuItem miCardGenerator;
     private javax.swing.JMenuItem miCardKeys;
+    private javax.swing.JMenuItem miCards;
     private javax.swing.JMenuItem miEventLog;
     private javax.swing.JMenuItem miIsoMessgaeFIelds;
     private javax.swing.JMenuItem miParameters;

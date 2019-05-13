@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lbPan" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbTrack1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbTrack2" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbDescription" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbKeySetId" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="tfKeySetId" min="-2" pref="255" max="-2" attributes="0"/>
+                  <Component id="tfDescription" min="-2" pref="255" max="-2" attributes="0"/>
+                  <Component id="tfTrack2" min="-2" pref="255" max="-2" attributes="0"/>
+                  <Component id="tfTrack1" min="-2" pref="255" max="-2" attributes="0"/>
+                  <Component id="tfPan" min="-2" pref="255" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lbPan" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tfPan" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tfKeySetId" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbKeySetId" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lbTrack1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tfTrack1" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lbTrack2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tfTrack2" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lbDescription" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tfDescription" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="lbPan">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="PAN"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfPan">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbTrack1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Track1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfTrack1">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbTrack2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Track2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfTrack2">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbDescription">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Description"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfDescription">
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfKeySetId">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbKeySetId">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Key set ID"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>

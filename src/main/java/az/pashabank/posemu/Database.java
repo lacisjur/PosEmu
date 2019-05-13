@@ -649,6 +649,56 @@ class Database {
     //============================================
     // SYSTEM
     //============================================
+    List<Card> getCards () throws Exception {
+        final String sqlStr = "SELECT card, key_set_id, track1, track2, description FROM card";
+        List<Card> cards = new ArrayList<>();
+        try (Statement sql = jdbc.createStatement();
+                ResultSet rs = sql.executeQuery(sqlStr)) {
+            while (rs.next()) {
+                Card card = new Card(
+                        rs.getString(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5));
+                cards.add(card);
+            }
+        } catch (SQLException e) {
+            log.error("Failed to select cards: " + e.getMessage(), e);
+            throw new Exception("Failed to select cards: " + e.getMessage(), e);
+        }
+        return cards;
+    }
+    
+    void deleteCard (String pan) throws Exception {
+        final String sqlStr = "DELETE FROM card WHERE card = ?";
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, pan);
+            sql.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to delete card: " + e.getMessage(), e);
+            throw new Exception("Failed to delete card: " + e.getMessage(), e);
+        }
+    }
+    
+    void insertCard (Card card) throws Exception {
+        final String sqlStr = "INSERT INTO card (card, key_set_id, track1, track2, description) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, card.getCard());
+            sql.setInt(2, card.getKeySetid());
+            sql.setString(3, card.getTrack1());
+            sql.setString(4, card.getTrack2());
+            sql.setString(5, card.getDescription());
+            sql.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to insert card: " + e.getMessage(), e);
+            throw new Exception("Failed to insert card: " + e.getMessage(), e);
+        }
+    }
+    
+    //============================================
+    // SYSTEM
+    //============================================
     int getNextSequence(String objectName) throws Exception {
         final String sqlStr = "SELECT seq, count(*) AS cnt FROM sqlite_sequence WHERE UPPER(name) = UPPER(?)";
         int nextSequence = 0;
