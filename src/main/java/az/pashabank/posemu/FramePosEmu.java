@@ -182,6 +182,11 @@ public class FramePosEmu extends javax.swing.JFrame {
 
         jButton1.setBackground(new java.awt.Color(102, 102, 102));
         jButton1.setToolTipText("Swipe magnetic stripe");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("File");
 
@@ -348,17 +353,21 @@ public class FramePosEmu extends javax.swing.JFrame {
     private String pin = "............";
     private String screenData = "";  
     private double amt = 0.0;
-    private boolean digit=true;
+
+// Amount and PIN classes initialization    
+    AmountInput input = new AmountInput();
+    PINinput PIN = PINinput.getInstance();
+    
+//    private boolean digit=true;
 
     private String screenClear() {
-
         // Variables setting to default value  
         this.state = PosState.IDLE;
         String amount = "0.00";
-        String pin = "............";
+        String pin = "......";
         System.out.println("amount="+input.getAmount());
         input.reset();
-        
+        PIN.reset();
         //amt=0.00;
 
         String screenData = "\n\n\n\n\n\n\n\n\n      Welcome to POS Emulator 1.0\n\n Please fell free to use this device\n         as real POS terminal";
@@ -378,9 +387,15 @@ public class FramePosEmu extends javax.swing.JFrame {
         return null;
     }
 
-    private String enterAmount() {
-               
+    private String enterAmount() {               
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amount;
+        this.taDisplay.setText(screenData);      
+        return null;
+    }
+    
+    
+    private String enterCard() {               
+        String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please swipe Card";
         this.taDisplay.setText(screenData);      
         return null;
     }
@@ -396,12 +411,9 @@ public class FramePosEmu extends javax.swing.JFrame {
 
 
     private void numberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberButtonActionPerformed
-
-        
-        
+                
         //this.taDisplay.append(evt.getActionCommand());
-        switch (this.state) {
-            
+        switch (this.state) {            
         
             case CHOOSE_TRN:
                 switch (evt.getActionCommand()) {
@@ -417,51 +429,18 @@ public class FramePosEmu extends javax.swing.JFrame {
                         break;
                 }
                 this.state = PosState.ENTER_AMT;
-                break;
+                break;                
             case ENTER_AMT:
                 String amountStr = input.add(evt.getActionCommand());
                 screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amountStr;
                 this.taDisplay.setText(screenData);
                 break;
-                
-                
-                
-                
-                
-                
-                /*
-                if (digit) {
-
-                 screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             0.00";
-                 this.taDisplay.setText(screenData);  
-
-                 digit=false;  
-                }
-                else 
-                {
-
-                if (amount.length()<13)
-                {                                                    
-                //if amount.    
-                if (amount.length() < 4) {                  
-                    amount = amount + evt.getActionCommand();
-                    amt = Double.parseDouble(amount) / 100;             
-                    screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amt;
-                    this.taDisplay.setText(screenData);                
-                }
-                else
-                {
-                    amount = amount + evt.getActionCommand();                                
-                    amount=amount.replaceAll("[^0-9]","");              
-                    amount = amount.substring(0, amount.length()-2) + "." + amount.substring((amount.length()-2), amount.length());                                                
-                    screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amount;
-                    this.taDisplay.setText(screenData);
-                }
-
-                }            
-                }
-                */
-
+            case ENTER_PIN:
+                String PINStr =PIN.add(evt.getActionCommand());
+                screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter PIN:\n\n             " + PINStr;
+                this.taDisplay.setText(screenData);
+                break;                
+                                                                            
         }
     }//GEN-LAST:event_numberButtonActionPerformed
 
@@ -473,12 +452,21 @@ public class FramePosEmu extends javax.swing.JFrame {
     private void btClear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClear1ActionPerformed
         // TODO add your handling code here:
 
-        if (this.state == PosState.IDLE) {
-
+        
+        switch (this.state) {
+                    
+            case IDLE:             
             this.state = this.state.nextState();
             this.state = this.state.nextState();
             screenChooseTrn();
+            break;
+            case ENTER_AMT: 
+            this.state = this.state.nextState();    
+            enterCard();
+            break;                        
         }
+        
+        
         //screenEnterPin();
     }//GEN-LAST:event_btClear1ActionPerformed
 
@@ -495,7 +483,7 @@ public class FramePosEmu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btSharpActionPerformed
 
-    AmountInput input = new AmountInput();
+    
     
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
         // TODO add your handling code here:
@@ -503,43 +491,28 @@ public class FramePosEmu extends javax.swing.JFrame {
        if (this.state == PosState.ENTER_AMT) {
            String amountStr = input.backspace();
            screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amountStr;
-           this.taDisplay.setText(screenData);  
-               
-           /*
-           if (!digit)
-           {
-               
-                if (amount.length() < 7) {     
-                 
-             //amount =  amount.replaceAll("[^0-9]","");         
-            // amount = amount.substring(0, amount.length()-1); 
-
-            System.out.println("amount="+amount);
-            
-            double d=Double.valueOf(amount);        
-            amount=String.valueOf(d/1000);
-            amount = amount.substring(0, amount.length()-1);
-                                                 
-            screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amount;
-            this.taDisplay.setText(screenData); 
-            
-            amount=String.valueOf(Double.valueOf(amount)*100);
-            
-            }
-            else
-            {
-                amount = amount + evt.getActionCommand();                                
-                amount=amount.replaceAll("[^0-9]","");              
-                amount = amount.substring(0, amount.length()-2) + "." + amount.substring((amount.length()-2), amount.length());                                                
-                screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amount;
-                this.taDisplay.setText(screenData);
-            }
-               
-               
-           }  
-*/
-       } 
+           this.taDisplay.setText(screenData); 
+       }
+           
+           
+        if (this.state==PosState.ENTER_PIN)
+        {
+                String PINStr =PIN.backspace();
+                screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter PIN:\n\n             " + PINStr;
+                this.taDisplay.setText(screenData);                
+        }                        
     }//GEN-LAST:event_btClearActionPerformed
+
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+       if (this.state==PosState.SWIPE_CARD) {
+            this.state = this.state.nextState();   
+            screenEnterPin();
+       }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     private void miIsoMessgaeFIeldsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miIsoMessgaeFIeldsActionPerformed
         DialogIsoInterfaces dlg = new DialogIsoInterfaces(this, true);
@@ -570,6 +543,7 @@ public class FramePosEmu extends javax.swing.JFrame {
                 + "Allowed values: NONE, ERROR, WARNING, INFO, DEBUG");
     }
     
+
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
