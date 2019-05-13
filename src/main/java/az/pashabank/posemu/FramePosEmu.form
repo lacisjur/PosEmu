@@ -8,6 +8,16 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="miEventLog">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Event log"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miEventLogActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="mPosEmu">
           <Properties>
@@ -26,6 +36,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="ISO8583 message fields"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miIsoMessgaeFIeldsActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

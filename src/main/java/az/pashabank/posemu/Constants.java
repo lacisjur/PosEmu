@@ -17,6 +17,8 @@ class Constants {
     static final String PARAM_MAC_KEY_IS_USED = "MAC_KEY_IS_USED";
     static final String PARAM_MASTER_KEY = "MASTER_KEY";
     static final String PARAM_MASTER_KEY_IS_USED = "MASTER_KEY_IS_USED";
+    
+    static final String OBJECT_INTERFACE = "INTERFACE";
 
     static final HashMap<Integer, IsoField> ISO_FIELDS = new HashMap<Integer, IsoField>();
 
