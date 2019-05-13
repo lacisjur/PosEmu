@@ -600,6 +600,51 @@ class Database {
             throw new Exception("Failed to delete interfaces: " + e.getMessage(), e);
         }
     }
+    
+    //============================================
+    // CARD KEYS
+    //============================================
+    List<CardKeySet> getCardKeySets () throws Exception {
+        return null;
+    }
+    
+    CardKeySet getCardKeySet (int id) throws Exception {
+        return null;
+    }
+    
+    void insertCardKeySet (CardKeySet cardKeySet) throws Exception {
+        final String sqlStr = "INSERT INTO card_key_set (id, name, cvk, pvk, track1_mapping, track2_mapping) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement sql = jdbc.prepareStatement(sqlStr)) {
+            sql.setInt(1, cardKeySet.getId());
+            sql.setString(2, cardKeySet.getName());
+            sql.setString(3, cardKeySet.getCvk());
+            sql.setString(4, cardKeySet.getPvk());
+            sql.setString(5, cardKeySet.getTrack1Mapping());
+            sql.setString(6, cardKeySet.getTrack2Mapping());
+            sql.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to insert card key set: " + e.getMessage(), e);
+            throw new Exception("Failed to insert card key set: " + e.getMessage(), e);
+        }
+    }
+    
+    void updateCardKeySet (CardKeySet cardKeySet) throws Exception {
+        final String sqlStr = "UPDATE card_key_set SET name = ?, cvk = ?, pvk = ?, "
+                + "track1_mapping = ?, track2_mapping = ? WHERE id = ?";
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, cardKeySet.getName());
+            sql.setString(2, cardKeySet.getCvk());
+            sql.setString(3, cardKeySet.getPvk());
+            sql.setInt(4, cardKeySet.getId());
+            sql.setString(5, cardKeySet.getTrack1Mapping());
+            sql.setString(6, cardKeySet.getTrack2Mapping());
+            sql.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to update card key set: " + e.getMessage(), e);
+            throw new Exception("Failed to update card key set: " + e.getMessage(), e);
+        }
+    }
 
     //============================================
     // SYSTEM

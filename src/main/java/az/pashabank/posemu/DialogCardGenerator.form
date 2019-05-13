@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[521, 469]"/>
+    </Property>
+    <Property name="size" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[521, 469]"/>
+    </Property>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lbTrack1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbTrack2" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="446" pref="446" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lbPan" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbExpiry" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbServiceCode" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbPin" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lbPvki" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="tfPvki" max="32767" attributes="0"/>
+                                  <Component id="tfPin" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="tfExpiryMonth" min="-2" pref="148" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="tfExpiryYear" min="-2" pref="155" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="tfServiceCode" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="tfPan" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="btGenerate" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="375" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="tfTrack2" alignment="0" max="32767" attributes="0"/>
+                          <Component id="tfTrack1" alignment="1" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="pKeys" alignment="0" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="pKeys" min="-2" pref="125" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tfPan" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbPan" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tfExpiryMonth" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tfExpiryYear" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbExpiry" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tfServiceCode" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbServiceCode" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tfPin" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbPin" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="tfPvki" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lbPvki" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="btGenerate" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lbTrack1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="tfTrack1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lbTrack2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+              <Component id="tfTrack2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JTextField" name="tfPan">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbPan">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="PAN"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfExpiryMonth">
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfExpiryYear">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbExpiry">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Expiry (MM / YY)"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfServiceCode">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbServiceCode">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Service code"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfPin">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbPin">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="PIN"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfPvki">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbPvki">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="PVKi"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btGenerate">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Generate"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfTrack1">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbTrack1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Track1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfTrack2">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbTrack2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Track2"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JPanel" name="pKeys">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Keys"/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lbKeySet" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lbCvk" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lbPvk" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="tfCvk" alignment="0" max="32767" attributes="0"/>
+                      <Component id="tfPvk" max="32767" attributes="0"/>
+                      <Component id="cbCardKeySet" alignment="0" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cbCardKeySet" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lbKeySet" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="tfCvk" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lbCvk" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="tfPvk" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lbPvk" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JTextField" name="tfCvk">
+        </Component>
+        <Component class="javax.swing.JTextField" name="tfPvk">
+        </Component>
+        <Component class="javax.swing.JLabel" name="lbCvk">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="CVK"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lbPvk">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="PVK"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="cbCardKeySet">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;ComboBoxItem&gt;"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lbKeySet">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Key set"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

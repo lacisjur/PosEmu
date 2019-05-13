@@ -1,10 +1,10 @@
 package az.pashabank.posemu;
 
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
 
 public class FramePosEmu extends javax.swing.JFrame {
 
@@ -43,10 +43,14 @@ public class FramePosEmu extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        miRecreiptPrinter = new javax.swing.JMenuItem();
         miEventLog = new javax.swing.JMenuItem();
         mPosEmu = new javax.swing.JMenu();
         miParameters = new javax.swing.JMenuItem();
         miIsoMessgaeFIelds = new javax.swing.JMenuItem();
+        mTools = new javax.swing.JMenu();
+        miCardKeys = new javax.swing.JMenuItem();
+        miCardGenerator = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -181,6 +185,9 @@ public class FramePosEmu extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
+        miRecreiptPrinter.setText("Receipt printer");
+        jMenu1.add(miRecreiptPrinter);
+
         miEventLog.setText("Event log");
         miEventLog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,6 +217,26 @@ public class FramePosEmu extends javax.swing.JFrame {
         mPosEmu.add(miIsoMessgaeFIelds);
 
         jMenuBar1.add(mPosEmu);
+
+        mTools.setText("Tools");
+
+        miCardKeys.setText("Card keys");
+        miCardKeys.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCardKeysActionPerformed(evt);
+            }
+        });
+        mTools.add(miCardKeys);
+
+        miCardGenerator.setText("Card generator");
+        miCardGenerator.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miCardGeneratorActionPerformed(evt);
+            }
+        });
+        mTools.add(miCardGenerator);
+
+        jMenuBar1.add(mTools);
 
         setJMenuBar(jMenuBar1);
 
@@ -515,7 +542,7 @@ public class FramePosEmu extends javax.swing.JFrame {
     }//GEN-LAST:event_btClearActionPerformed
 
     private void miIsoMessgaeFIeldsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miIsoMessgaeFIeldsActionPerformed
-        DialogIsoMessageFields dlg = new DialogIsoMessageFields(this, true);
+        DialogIsoInterfaces dlg = new DialogIsoInterfaces(this, true);
         dlg.setVisible(true);
     }//GEN-LAST:event_miIsoMessgaeFIeldsActionPerformed
 
@@ -525,6 +552,15 @@ public class FramePosEmu extends javax.swing.JFrame {
         }
         this.log.setVisible(true);
     }//GEN-LAST:event_miEventLogActionPerformed
+
+    private void miCardGeneratorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCardGeneratorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_miCardGeneratorActionPerformed
+
+    private void miCardKeysActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCardKeysActionPerformed
+        DialogCardKeySet dlg = new DialogCardKeySet(this, true);
+        dlg.setVisible(true);
+    }//GEN-LAST:event_miCardKeysActionPerformed
 
     private static void cryForHelp () {
         System.out.println("Arguments:");
@@ -598,9 +634,13 @@ public class FramePosEmu extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenu mPosEmu;
+    private javax.swing.JMenu mTools;
+    private javax.swing.JMenuItem miCardGenerator;
+    private javax.swing.JMenuItem miCardKeys;
     private javax.swing.JMenuItem miEventLog;
     private javax.swing.JMenuItem miIsoMessgaeFIelds;
     private javax.swing.JMenuItem miParameters;
+    private javax.swing.JMenuItem miRecreiptPrinter;
     private javax.swing.JTextArea taDisplay;
     // End of variables declaration//GEN-END:variables
 }
