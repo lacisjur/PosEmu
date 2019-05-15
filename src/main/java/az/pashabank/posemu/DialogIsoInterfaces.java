@@ -37,7 +37,7 @@ public class DialogIsoInterfaces extends javax.swing.JDialog {
             for (Interface iface : ifaces) {
                 Object[] row = ifaceToRow(iface);
                 this.tIfacesModel.addRow(row);
-                this.cbIfacesModel.addElement(new ComboBoxItem(iface.getId(), iface.getName()));
+                this.cbIfacesModel.addElement(new ComboBoxItem(Integer.toString(iface.getId()), iface.getName()));
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Exception: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -351,7 +351,7 @@ public class DialogIsoInterfaces extends javax.swing.JDialog {
                 Object[] row = ifaceToRow(iface);
                 db.insertInterface(iface);
                 this.tIfacesModel.addRow(row);
-                this.cbIfacesModel.addElement(new ComboBoxItem(iface.getId(), iface.getName()));
+                this.cbIfacesModel.addElement(new ComboBoxItem(Integer.toString(iface.getId()), iface.getName()));
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Exception: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -373,9 +373,9 @@ public class DialogIsoInterfaces extends javax.swing.JDialog {
                 this.tIfaces.setValueAt(iface.getFieldCount(), selectedRow, 3);
                 for (int i = 0; i < this.cbIfacesModel.getSize(); i++) {
                     ComboBoxItem item = (ComboBoxItem) this.cbIfacesModel.getElementAt(i);
-                    if (item.getId() == iface.getId()) {
+                    if (item.getKey().equals(iface.getId())) {
                         this.cbIfacesModel.removeElementAt(i);
-                        this.cbIfacesModel.addElement(new ComboBoxItem(iface.getId(), iface.getName()));
+                        this.cbIfacesModel.addElement(new ComboBoxItem(Integer.toString(iface.getId()), iface.getName()));
                         break;
                     }
                 }
@@ -399,7 +399,7 @@ public class DialogIsoInterfaces extends javax.swing.JDialog {
                 this.tIfacesModel.removeRow(selectedRow);
                 for (int i = 0; i < this.cbIfacesModel.getSize(); i++) {
                     ComboBoxItem item = (ComboBoxItem) this.cbIfacesModel.getElementAt(i);
-                    if (item.getId() == id) {
+                    if (item.getKey().equals(id)) {
                         this.cbIfacesModel.removeElementAt(i);
                         break;
                     }
@@ -427,7 +427,7 @@ public class DialogIsoInterfaces extends javax.swing.JDialog {
                 db.insertFields(fields, id);
                 Object[] row = ifaceToRow(nIface);
                 this.tIfacesModel.addRow(row);
-                this.cbIfacesModel.addElement(new ComboBoxItem(nIface.getId(), nIface.getName()));
+                this.cbIfacesModel.addElement(new ComboBoxItem(Integer.toString(nIface.getId()), nIface.getName()));
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Exception: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -463,7 +463,7 @@ public class DialogIsoInterfaces extends javax.swing.JDialog {
         }
         ComboBoxItem iface = (ComboBoxItem) this.cbIfaces.getSelectedItem();
         try {
-            List<IsoField> fields = db.getFields(iface.getId());
+            List<IsoField> fields = db.getFields(Integer.valueOf(iface.getKey()));
             this.tMessageFieldsModel.setRowCount(0);
             for (IsoField field : fields) {
                 Object[] row = isoFieldToRow(field);
@@ -480,7 +480,7 @@ public class DialogIsoInterfaces extends javax.swing.JDialog {
             return;
         }
         IsoField field = getSelectedIsoField(selectedRow);
-        int interfaceId = ((ComboBoxItem)this.cbIfacesModel.getSelectedItem()).getId();
+        int interfaceId = Integer.valueOf(((ComboBoxItem)this.cbIfacesModel.getSelectedItem()).getKey());
         PanelEditIsoField panel = new PanelEditIsoField(field);
         int option = JOptionPane.showConfirmDialog(this, panel, "Edit ISO field", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {

@@ -2,21 +2,21 @@ package az.pashabank.posemu;
 
 public class ComboBoxItem {
 
-    private final int id;
+    private final String  key;
     private final String label;
     
 
-    ComboBoxItem(int id, String label) {
+    ComboBoxItem(String key, String label) {
         this.label = label;
-        this.id = id;
+        this.key = key;
     }
 
     public String getLabel() {
         return label;
     }
 
-    public int getId() {
-        return id;
+    public String getKey() {
+        return key;
     }
     
     @Override
@@ -24,7 +24,7 @@ public class ComboBoxItem {
         boolean result = false;
         if (obj instanceof ComboBoxItem) {
             ComboBoxItem item = (ComboBoxItem)obj;
-            if (this.id == item.id) {
+            if (this.key == item.key) {
                 result = true;
             }
         }
@@ -33,7 +33,7 @@ public class ComboBoxItem {
 
     @Override
     public String toString() {
-        return this.id + " - " + this.label;
+        return this.key + " - " + this.label;
     }
 
 }

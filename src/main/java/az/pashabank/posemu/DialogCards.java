@@ -84,6 +84,11 @@ public class DialogCards extends javax.swing.JDialog {
         });
 
         btEdit.setText("Edit");
+        btEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btEditActionPerformed(evt);
+            }
+        });
 
         btDelete.setText("Delete");
         btDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -153,6 +158,37 @@ public class DialogCards extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Exception: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btDeleteActionPerformed
+
+    private void btEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditActionPerformed
+         
+        int selectedRow = this.tCards.getSelectedRow();         
+           if (selectedRow == -1) {
+            return;
+            }        
+        
+        
+        Card editcard = new Card(
+        tCards.getModel().getValueAt(tCards.getSelectedRow(), 0).toString(),
+        Integer.valueOf(tCards.getModel().getValueAt(tCards.getSelectedRow(), 1).toString()),
+        tCards.getModel().getValueAt(tCards.getSelectedRow(), 2).toString(),
+        tCards.getModel().getValueAt(tCards.getSelectedRow(), 3).toString(),       
+        tCards.getModel().getValueAt(tCards.getSelectedRow(), 4).toString()
+        );
+                        
+        PanelAddEditCard panel = new PanelAddEditCard(editcard);               
+        int option = JOptionPane.showConfirmDialog(this, panel, "Update card", JOptionPane.OK_CANCEL_OPTION);        
+        if (option == JOptionPane.OK_OPTION) {
+            Card card = panel.getCard();
+            try {
+                this.tCardsModel.removeRow(selectedRow);
+                this.db.updateCard(card);
+                this.tCardsModel.addRow(cardToRow(card));
+            } catch  (Exception e) {
+                JOptionPane.showMessageDialog(this, "Exception: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+    }//GEN-LAST:event_btEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAdd;

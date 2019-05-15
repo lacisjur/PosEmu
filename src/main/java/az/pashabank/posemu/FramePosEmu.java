@@ -1,9 +1,9 @@
 package az.pashabank.posemu;
 
 import java.awt.Font;
-import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class FramePosEmu extends javax.swing.JFrame {
@@ -360,21 +360,20 @@ public class FramePosEmu extends javax.swing.JFrame {
     private PosState state = PosState.IDLE;
     private String amount = "0.00";
     private String pin = "............";
-    private String screenData = "";  
+    private String screenData = "";
     private double amt = 0.0;
 
 // Amount and PIN classes initialization    
     AmountInput input = new AmountInput();
     PINinput PIN = PINinput.getInstance();
-    
-//    private boolean digit=true;
 
+//    private boolean digit=true;
     private String screenClear() {
         // Variables setting to default value  
         this.state = PosState.IDLE;
-        String amount = "0.00";
+        amount = "0.00";
         String pin = "......";
-        System.out.println("amount="+input.getAmount());
+        System.out.println("amount=" + input.getAmount());
         input.reset();
         PIN.reset();
         //amt=0.00;
@@ -396,16 +395,15 @@ public class FramePosEmu extends javax.swing.JFrame {
         return null;
     }
 
-    private String enterAmount() {               
+    private String enterAmount() {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amount;
-        this.taDisplay.setText(screenData);      
+        this.taDisplay.setText(screenData);
         return null;
     }
-    
-    
-    private String enterCard() {               
+
+    private String enterCard() {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please swipe Card";
-        this.taDisplay.setText(screenData);      
+        this.taDisplay.setText(screenData);
         return null;
     }
 
@@ -420,15 +418,15 @@ public class FramePosEmu extends javax.swing.JFrame {
 
 
     private void numberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberButtonActionPerformed
-                
+
         //this.taDisplay.append(evt.getActionCommand());
-        switch (this.state) {            
-        
+        switch (this.state) {
+
             case CHOOSE_TRN:
                 switch (evt.getActionCommand()) {
                     case "1":
                         this.state = this.state.nextState();
-                        enterAmount();                    
+                        enterAmount();
                         break;
                     case "2":
                         System.out.println("2 option is choosed");
@@ -436,20 +434,20 @@ public class FramePosEmu extends javax.swing.JFrame {
                     case "3":
                         System.out.println("3 option is choosed");
                         break;
-                }
-                this.state = PosState.ENTER_AMT;
-                break;                
-            case ENTER_AMT:
+                }                
+                break;
+            case ENTER_AMT:                
                 String amountStr = input.add(evt.getActionCommand());
+                amount=amountStr;
                 screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amountStr;
                 this.taDisplay.setText(screenData);
                 break;
             case ENTER_PIN:
-                String PINStr =PIN.add(evt.getActionCommand());
+                String PINStr = PIN.add(evt.getActionCommand());
                 screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter PIN:\n\n             " + PINStr;
                 this.taDisplay.setText(screenData);
-                break;                
-                                                                            
+                break;
+
         }
     }//GEN-LAST:event_numberButtonActionPerformed
 
@@ -461,27 +459,26 @@ public class FramePosEmu extends javax.swing.JFrame {
     private void btClear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClear1ActionPerformed
         // TODO add your handling code here:
 
-        
         switch (this.state) {
-                    
-            case IDLE:             
-            this.state = this.state.nextState();
-            this.state = this.state.nextState();
-            screenChooseTrn();
-            break;
-            case ENTER_AMT: 
-            this.state = this.state.nextState();    
-            enterCard();
-            break;                        
-        }
-        
-        
-        //screenEnterPin();
+            case IDLE:
+                this.state = this.state.nextState();
+                this.state = this.state.nextState();
+                screenChooseTrn();
+                break;
+            case ENTER_AMT:
+                if (amount.equals("0.00"))
+                {
+                    return;
+                }                
+                this.state = this.state.nextState();
+                enterCard();
+                break;
+        }        
     }//GEN-LAST:event_btClear1ActionPerformed
 
     private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
         // TODO add your handling code here:
-        
+
         screenClear();
     }//GEN-LAST:event_btCancelActionPerformed
 
@@ -492,34 +489,49 @@ public class FramePosEmu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btSharpActionPerformed
 
-    
-    
+
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
         // TODO add your handling code here:
-        
-       if (this.state == PosState.ENTER_AMT) {
-           String amountStr = input.backspace();
-           screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amountStr;
-           this.taDisplay.setText(screenData); 
-       }
-           
-           
-        if (this.state==PosState.ENTER_PIN)
-        {
-                String PINStr =PIN.backspace();
-                screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter PIN:\n\n             " + PINStr;
-                this.taDisplay.setText(screenData);                
-        }                        
+
+        if (this.state == PosState.ENTER_AMT) {
+            String amountStr = input.backspace();
+            screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amountStr;
+            this.taDisplay.setText(screenData);
+        }
+
+        if (this.state == PosState.ENTER_PIN) {
+            String PINStr = PIN.backspace();
+            screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter PIN:\n\n             " + PINStr;
+            this.taDisplay.setText(screenData);
+        }
     }//GEN-LAST:event_btClearActionPerformed
 
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
-       if (this.state==PosState.SWIPE_CARD) {
-            this.state = this.state.nextState();   
-            screenEnterPin();
-       }
+
+        //ChooseCard ch = new ChooseCard(this, true);
+        //ch.setVisible(true);
+        try {
+            List<Card> cards = db.getCards();
+            PanelCardList panel = new PanelCardList(cards);
+            int option = JOptionPane.showConfirmDialog(this, panel, "Select card", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                String pan = panel.getPan();
+                Card card = db.getCard(pan);
+                
+                
+               // JOptionPane.showMessageDialog(this, card.toString(), "Debug", JOptionPane.ERROR_MESSAGE);
+                
+                
+                if (this.state == PosState.SWIPE_CARD) {
+                    this.state = this.state.nextState();
+                    screenEnterPin();
+                }                
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Exception: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
@@ -549,14 +561,13 @@ public class FramePosEmu extends javax.swing.JFrame {
         dlg.setVisible(true);
     }//GEN-LAST:event_miCardsActionPerformed
 
-    private static void cryForHelp () {
+    private static void cryForHelp() {
         System.out.println("Arguments:");
         System.out.println("--help - displays help");
         System.out.println("--dbf-file - database file to be used, if not provided, programm uses default");
         System.out.println("--log-level - logging level, if not provided, logging level INFO is used. "
                 + "Allowed values: NONE, ERROR, WARNING, INFO, DEBUG");
     }
-    
 
     public static void main(String args[]) {
         try {
@@ -586,8 +597,8 @@ public class FramePosEmu extends javax.swing.JFrame {
 
         String dbfFile = null;
         String logLevel = null;
-        
-        for (int i = 0; i < args.length; i++){
+
+        for (int i = 0; i < args.length; i++) {
             if (args[i].equals("--help")) {
                 cryForHelp();
             } else if (args[i].equals("--dbf-file")) {

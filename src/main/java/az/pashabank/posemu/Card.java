@@ -35,5 +35,10 @@ public class Card {
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public String toString() {
+        return "Card{" + "card=" + card + ", keySetId=" + keySetId + ", track1=" + track1 + ", track2=" + track2 + ", description=" + description + '}';
+    }       
     
 }

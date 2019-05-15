@@ -650,7 +650,7 @@ class Database {
     // SYSTEM
     //============================================
     List<Card> getCards () throws Exception {
-        final String sqlStr = "SELECT card, key_set_id, track1, track2, description FROM card";
+        final String sqlStr = "SELECT card, key_set_id, track1, track2, description FROM card ORDER BY card";
         List<Card> cards = new ArrayList<>();
         try (Statement sql = jdbc.createStatement();
                 ResultSet rs = sql.executeQuery(sqlStr)) {
@@ -670,6 +670,26 @@ class Database {
         return cards;
     }
     
+    Card getCard (String pan) throws Exception {
+        final String sqlStr = "SELECT key_set_id, track1, track2, description FROM card WHERE card = ?";
+        Card card = null;
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)){
+            sql.setString(1, pan);
+            try (ResultSet rs = sql.executeQuery()) {
+                rs.next();
+                card = new Card(pan, 
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4));
+            }
+        } catch (SQLException e) {
+            log.error("Failed to select card: " + e.getMessage(), e);
+            throw new Exception("Failed to select card: " + e.getMessage(), e);
+        }
+        return card;
+    }
+    
     void deleteCard (String pan) throws Exception {
         final String sqlStr = "DELETE FROM card WHERE card = ?";
         try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
@@ -678,6 +698,22 @@ class Database {
         } catch (SQLException e) {
             log.error("Failed to delete card: " + e.getMessage(), e);
             throw new Exception("Failed to delete card: " + e.getMessage(), e);
+        }
+    }
+    
+     void updateCard (Card card) throws Exception {
+        final String sqlStr = "update card set card=?, key_set_id=?, track1=?, track2=?, description=?  WHERE card = ?";
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, card.getCard());
+            sql.setInt(2, card.getKeySetid());
+            sql.setString(3, card.getTrack1());
+            sql.setString(4, card.getTrack2());
+            sql.setString(5, card.getDescription());
+            sql.setString(6, card.getCard());
+            sql.executeUpdate();
+            } catch (SQLException e) {
+            log.error("Failed to update card: " + e.getMessage(), e);
+            throw new Exception("Failed to update card: " + e.getMessage(), e);
         }
     }
     

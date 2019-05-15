@@ -7,6 +7,7 @@ public class PanelAddEditCard extends javax.swing.JPanel {
     }
     
     public PanelAddEditCard(Card card) {
+        initComponents();
         this.tfPan.setText(card.getCard());
         this.tfKeySetId.setText(Integer.toString(card.getKeySetid()));
         this.tfTrack1.setText(card.getTrack1());
@@ -94,7 +95,7 @@ public class PanelAddEditCard extends javax.swing.JPanel {
             this.tfTrack2.getText(),
             this.tfDescription.getText());
     }    
-
+                 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lbDescription;
     private javax.swing.JLabel lbKeySetId;
