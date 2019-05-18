@@ -79,6 +79,69 @@ class Database {
         return value;
     }
 
+    String getTransaction() throws Exception {
+        String sqlStr = "SELECT max(transaction_id)+1 FROM transactions";
+        String value = null;
+        try (PreparedStatement sql = jdbc.prepareStatement(sqlStr)) {
+            try (ResultSet rs = sql.executeQuery()) {
+                rs.next();
+                value = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            log.error("Failed to select parameter: " + e.getMessage(), e);
+            throw new Exception("Failed to select parameter: " + e.getMessage(), e);
+        }
+        log.info("Get Transaction ID: " + value);
+        return value;
+    }
+
+    void setTransaction(String trn) throws Exception {
+        String sqlStr = "insert into transactions(transaction_id) values(?)";
+        try (PreparedStatement sql = jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, trn);
+            sql.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to add currency: " + e.getMessage(), e);
+            throw new Exception("Failed to add currency: " + e.getMessage(), e);
+        }
+    }
+
+    void updateTransaction(String trn, String param, String var) throws Exception {
+        String sqlStr = null;
+        switch (param) {
+            case "card":
+                sqlStr = "update transactions set card=? where transaction_id=?";
+                break;
+            case "amount":
+                sqlStr = "update transactions set amount=? where transaction_id=?";
+                break;
+            case "status":
+                sqlStr = "update transactions set status=? where transaction_id=?";
+                break;
+            case "rrn":
+                sqlStr = "update transactions set rrn=? where transaction_id=?";
+                break;
+            case "fld_039":
+                sqlStr = "update transactions set fld_039=? where transaction_id=?";
+                break;
+            case "addinfo":
+                sqlStr = "update transactions set add_info=? where transaction_id=?";
+                break;
+            case "date":
+                sqlStr = "update transactions set date=? where transaction_id=?";
+                break;
+        }
+
+        try (PreparedStatement sql = jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, var);
+            sql.setString(2, trn);
+            sql.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to add currency: " + e.getMessage(), e);
+            throw new Exception("Failed to add currency: " + e.getMessage(), e);
+        }
+    }
+
     List<Currency> getCurrencies() throws Exception {
         String sqlStr = "SELECT ccy_num_code, ccy_alpha_code, ccy_name FROM currency";
         List<Currency> currencies = new ArrayList<>();
@@ -173,7 +236,7 @@ class Database {
     void updateField(int interfaceId, IsoField field) throws Exception {
         final String sqlStr = "UPDATE message_field SET name = ?, min_length = ?, "
                 + "max_length = ?, length_qualifier = ?, padding_char = ? "
-                + "WHERE id = ? AND interface_id = ?";  
+                + "WHERE id = ? AND interface_id = ?";
         try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
             sql.setString(1, field.getName());
             sql.setInt(2, field.getMinLength());
@@ -489,12 +552,12 @@ class Database {
             throw new Exception("Failed to insert message field: " + e.getMessage(), e);
         }
     }
-    
-    void insertFields (List<IsoField> fields, int interfaceId) throws Exception {
+
+    void insertFields(List<IsoField> fields, int interfaceId) throws Exception {
         for (IsoField field : fields) {
             insertField(field.getId(), interfaceId, field.getName(), field.getMinLength(),
                     field.getMaxLength(), field.getLengthQualifier(), field.getPaddingChar());
-        } 
+        }
     }
 
     void deleteFields(int interfaceId) throws Exception {
@@ -507,9 +570,9 @@ class Database {
             throw new Exception("Failed to delete message fields for interface " + interfaceId + ": " + e.getMessage(), e);
         }
     }
-    
+
     @Deprecated
-    void deleteFields () throws Exception {
+    void deleteFields() throws Exception {
         final String sqlStr = "DELETE FROM message_field";
         try (Statement sql = this.jdbc.createStatement()) {
             sql.executeUpdate(sqlStr);
@@ -540,7 +603,7 @@ class Database {
         }
         return ifaces;
     }
-    
+
     @Deprecated
     void insertDefaultInterfces() throws Exception {
         insertInterface(new Interface(1, "ISO8583-1993", "Standard ISO8583-1993 interface", 128));
@@ -588,7 +651,7 @@ class Database {
             throw new Exception("Failed to delete interface: " + e.getMessage(), e);
         }
     }
-    
+
     @Deprecated
     void deleteInterfaces() throws Exception {
         deleteFields();
@@ -600,19 +663,19 @@ class Database {
             throw new Exception("Failed to delete interfaces: " + e.getMessage(), e);
         }
     }
-    
+
     //============================================
     // CARD KEYS
     //============================================
-    List<CardKeySet> getCardKeySets () throws Exception {
+    List<CardKeySet> getCardKeySets() throws Exception {
         return null;
     }
-    
-    CardKeySet getCardKeySet (int id) throws Exception {
+
+    CardKeySet getCardKeySet(int id) throws Exception {
         return null;
     }
-    
-    void insertCardKeySet (CardKeySet cardKeySet) throws Exception {
+
+    void insertCardKeySet(CardKeySet cardKeySet) throws Exception {
         final String sqlStr = "INSERT INTO card_key_set (id, name, cvk, pvk, track1_mapping, track2_mapping) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement sql = jdbc.prepareStatement(sqlStr)) {
@@ -628,8 +691,8 @@ class Database {
             throw new Exception("Failed to insert card key set: " + e.getMessage(), e);
         }
     }
-    
-    void updateCardKeySet (CardKeySet cardKeySet) throws Exception {
+
+    void updateCardKeySet(CardKeySet cardKeySet) throws Exception {
         final String sqlStr = "UPDATE card_key_set SET name = ?, cvk = ?, pvk = ?, "
                 + "track1_mapping = ?, track2_mapping = ? WHERE id = ?";
         try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
@@ -649,7 +712,7 @@ class Database {
     //============================================
     // SYSTEM
     //============================================
-    List<Card> getCards () throws Exception {
+    List<Card> getCards() throws Exception {
         final String sqlStr = "SELECT card, key_set_id, track1, track2, description FROM card ORDER BY card";
         List<Card> cards = new ArrayList<>();
         try (Statement sql = jdbc.createStatement();
@@ -669,19 +732,19 @@ class Database {
         }
         return cards;
     }
-    
-    Card getCard (String pan) throws Exception {
+
+    Card getCard(String pan) throws Exception {
         final String sqlStr = "SELECT key_set_id, track1, track2, description FROM card WHERE card = ?";
         Card card = null;
-        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)){
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
             sql.setString(1, pan);
             try (ResultSet rs = sql.executeQuery()) {
                 rs.next();
-                card = new Card(pan, 
-                    rs.getInt(1),
-                    rs.getString(2),
-                    rs.getString(3),
-                    rs.getString(4));
+                card = new Card(pan,
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4));
             }
         } catch (SQLException e) {
             log.error("Failed to select card: " + e.getMessage(), e);
@@ -689,8 +752,8 @@ class Database {
         }
         return card;
     }
-    
-    void deleteCard (String pan) throws Exception {
+
+    void deleteCard(String pan) throws Exception {
         final String sqlStr = "DELETE FROM card WHERE card = ?";
         try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
             sql.setString(1, pan);
@@ -700,8 +763,8 @@ class Database {
             throw new Exception("Failed to delete card: " + e.getMessage(), e);
         }
     }
-    
-     void updateCard (Card card) throws Exception {
+
+    void updateCard(Card card) throws Exception {
         final String sqlStr = "update card set card=?, key_set_id=?, track1=?, track2=?, description=?  WHERE card = ?";
         try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
             sql.setString(1, card.getCard());
@@ -711,13 +774,13 @@ class Database {
             sql.setString(5, card.getDescription());
             sql.setString(6, card.getCard());
             sql.executeUpdate();
-            } catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Failed to update card: " + e.getMessage(), e);
             throw new Exception("Failed to update card: " + e.getMessage(), e);
         }
     }
-    
-    void insertCard (Card card) throws Exception {
+
+    void insertCard(Card card) throws Exception {
         final String sqlStr = "INSERT INTO card (card, key_set_id, track1, track2, description) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
             sql.setString(1, card.getCard());
@@ -731,7 +794,7 @@ class Database {
             throw new Exception("Failed to insert card: " + e.getMessage(), e);
         }
     }
-    
+
     //============================================
     // SYSTEM
     //============================================

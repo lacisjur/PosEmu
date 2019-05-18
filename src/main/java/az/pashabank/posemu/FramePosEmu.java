@@ -3,7 +3,9 @@ package az.pashabank.posemu;
 import java.awt.Font;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 public class FramePosEmu extends javax.swing.JFrame {
@@ -54,6 +56,7 @@ public class FramePosEmu extends javax.swing.JFrame {
         miCardGenerator = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         taDisplay.setEditable(false);
         taDisplay.setBackground(new java.awt.Color(204, 255, 255));
@@ -362,6 +365,7 @@ public class FramePosEmu extends javax.swing.JFrame {
     private String pin = "............";
     private String screenData = "";
     private double amt = 0.0;
+    public Integer transaction_id = 0;
 
 // Amount and PIN classes initialization    
     AmountInput input = new AmountInput();
@@ -395,6 +399,18 @@ public class FramePosEmu extends javax.swing.JFrame {
         return null;
     }
 
+    private String callingHost(String par) {
+        String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please wait connected to Host\n" + "     " + par;
+        this.taDisplay.setText(screenData);
+        return null;
+    }
+
+    private String receivingAnswer() {
+        String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please wait receiving answer\n\n    .... ....  ....";
+        this.taDisplay.setText(screenData);
+        return null;
+    }
+
     private String enterAmount() {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amount;
         this.taDisplay.setText(screenData);
@@ -405,15 +421,6 @@ public class FramePosEmu extends javax.swing.JFrame {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please swipe Card";
         this.taDisplay.setText(screenData);
         return null;
-    }
-
-    private void nextState() {
-        this.state = this.state.nextState();
-        switch (this.state) {
-            case ENTER_PIN:
-                screenEnterPin();
-                break;
-        }
     }
 
 
@@ -434,11 +441,11 @@ public class FramePosEmu extends javax.swing.JFrame {
                     case "3":
                         System.out.println("3 option is choosed");
                         break;
-                }                
+                }
                 break;
-            case ENTER_AMT:                
+            case ENTER_AMT:
                 String amountStr = input.add(evt.getActionCommand());
-                amount=amountStr;
+                amount = amountStr;
                 screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amountStr;
                 this.taDisplay.setText(screenData);
                 break;
@@ -461,19 +468,54 @@ public class FramePosEmu extends javax.swing.JFrame {
 
         switch (this.state) {
             case IDLE:
+                this.db = Database.getInstance();
+                try {
+                    transaction_id = Integer.valueOf(db.getTransaction());
+                    System.out.println("transaction_id=" + transaction_id);
+                    db.setTransaction(Integer.toString(transaction_id));
+                    db.updateTransaction(String.valueOf(transaction_id), "date", new Date().toString());
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Error occured while closing databaseL " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
                 this.state = this.state.nextState();
                 this.state = this.state.nextState();
                 screenChooseTrn();
                 break;
             case ENTER_AMT:
-                if (amount.equals("0.00"))
-                {
+                if (amount.equals("0.00")) {
                     return;
-                }                
+                }
+                this.db = Database.getInstance();
+                try {
+                    db.updateTransaction(String.valueOf(transaction_id), "amount", amount);
+                    db.updateTransaction(String.valueOf(transaction_id), "status", "Amount Inputted");
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Error occured while closing databaseL " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
                 this.state = this.state.nextState();
                 enterCard();
                 break;
-        }        
+            case ENTER_PIN:
+                this.db = Database.getInstance();
+                try {
+                    db.updateTransaction(String.valueOf(transaction_id), "status", "PIN Inputted; Calling Host");
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Error occured while closing databaseL " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                this.state = this.state.nextState();
+                callingHost("Operation . . . Starting . . .");              
+                Threading t1 = new Threading("HostCall");
+                t1.start();               
+                this.state = this.state.nextState();                                          
+                receivingAnswer();
+                Threading t2 = new Threading("ReceiveAnswer");
+                t2.start(); 
+                this.state = this.state.nextState();     
+                
+                
+                DialogReceipt dg = new DialogReceipt(this,true);
+                dg.setVisible(true);
+        }
     }//GEN-LAST:event_btClear1ActionPerformed
 
     private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
@@ -510,6 +552,11 @@ public class FramePosEmu extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
+        
+        if (this.state != PosState.SWIPE_CARD) {
+            return;
+        }
+        
         //ChooseCard ch = new ChooseCard(this, true);
         //ch.setVisible(true);
         try {
@@ -519,15 +566,13 @@ public class FramePosEmu extends javax.swing.JFrame {
             if (option == JOptionPane.OK_OPTION) {
                 String pan = panel.getPan();
                 Card card = db.getCard(pan);
-                
-                
-               // JOptionPane.showMessageDialog(this, card.toString(), "Debug", JOptionPane.ERROR_MESSAGE);
-                
-                
-                if (this.state == PosState.SWIPE_CARD) {
+                db.updateTransaction(String.valueOf(transaction_id), "card", card.getCard());
+                db.updateTransaction(String.valueOf(transaction_id), "status", "Card Info Updated");
+                // JOptionPane.showMessageDialog(this, card.toString(), "Debug", JOptionPane.ERROR_MESSAGE);
+            if (this.state == PosState.SWIPE_CARD) {
                     this.state = this.state.nextState();
                     screenEnterPin();
-                }                
+                }
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Exception: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
