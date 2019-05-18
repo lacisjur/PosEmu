@@ -2,6 +2,7 @@ package az.pashabank.posemu;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -38,6 +39,16 @@ public class DialogParameters extends javax.swing.JDialog {
             this.cbMasterKeyIsUsed.setSelected(db.getBooleanParameter(Constants.PARAM_MASTER_KEY_IS_USED));
             this.tfMasterKey.setEnabled(this.cbMasterKeyIsUsed.isSelected());
             this.btGenerateMasterKey.setEnabled(this.cbMasterKeyIsUsed.isSelected());
+            int ifaceId = db.getIntParameter(Constants.PARAM_TERMINAL_INTERFACE_ID);
+            List<Interface> ifaces = db.getInterfaces();
+            DefaultComboBoxModel model = (DefaultComboBoxModel)this.cbInterfaces.getModel();
+            for (int i = 0; i < ifaces.size(); i++) {
+                Interface iface = ifaces.get(i);
+                model.addElement(new ComboBoxItem(Integer.toString(iface.getId()), iface.getName()));
+                if (ifaceId == iface.getId()) {
+                    this.cbInterfaces.setSelectedIndex(i);
+                }
+            }
             List<Currency> currencies = db.getCurrencies();
             List<String> columns = new ArrayList<>();
             columns.add("Numeric code");
@@ -76,6 +87,8 @@ public class DialogParameters extends javax.swing.JDialog {
         lbMerchantId = new javax.swing.JLabel();
         tfMerchantId = new javax.swing.JTextField();
         lbAcqHostTimeout1 = new javax.swing.JLabel();
+        cbInterfaces = new javax.swing.JComboBox<>();
+        lbInterface = new javax.swing.JLabel();
         pCurrencies = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tCurrencies = new javax.swing.JTable();
@@ -138,7 +151,7 @@ public class DialogParameters extends javax.swing.JDialog {
                     .addComponent(lbAcqHostTimeout, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(12, 12, 12)
                 .addGroup(pAcquirerHostLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tfAcqHostPort, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
+                    .addComponent(tfAcqHostPort, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
                     .addComponent(tfAcqHostTimeout)
                     .addComponent(tfAcqHostIp))
                 .addContainerGap())
@@ -169,37 +182,8 @@ public class DialogParameters extends javax.swing.JDialog {
         lbAcqHostTimeout1.setText("Termnal ID");
         lbAcqHostTimeout1.setToolTipText("");
 
-        javax.swing.GroupLayout pTerminalParametersLayout = new javax.swing.GroupLayout(pTerminalParameters);
-        pTerminalParameters.setLayout(pTerminalParametersLayout);
-        pTerminalParametersLayout.setHorizontalGroup(
-            pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pTerminalParametersLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pTerminalParametersLayout.createSequentialGroup()
-                        .addComponent(lbMerchantId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(pTerminalParametersLayout.createSequentialGroup()
-                        .addComponent(lbAcqHostTimeout1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)))
-                .addGroup(pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(tfTerminalId, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
-                    .addComponent(tfMerchantId))
-                .addContainerGap())
-        );
-        pTerminalParametersLayout.setVerticalGroup(
-            pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pTerminalParametersLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfTerminalId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbAcqHostTimeout1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbMerchantId)
-                    .addComponent(tfMerchantId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        lbInterface.setText("Interface");
+        lbInterface.setToolTipText("");
 
         pCurrencies.setBorder(javax.swing.BorderFactory.createTitledBorder("Currencies"));
 
@@ -259,6 +243,50 @@ public class DialogParameters extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        javax.swing.GroupLayout pTerminalParametersLayout = new javax.swing.GroupLayout(pTerminalParameters);
+        pTerminalParameters.setLayout(pTerminalParametersLayout);
+        pTerminalParametersLayout.setHorizontalGroup(
+            pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pTerminalParametersLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pTerminalParametersLayout.createSequentialGroup()
+                        .addGroup(pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pTerminalParametersLayout.createSequentialGroup()
+                                .addComponent(lbAcqHostTimeout1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20))
+                            .addGroup(pTerminalParametersLayout.createSequentialGroup()
+                                .addGroup(pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbMerchantId, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                                    .addComponent(lbInterface, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addGroup(pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tfMerchantId, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tfTerminalId, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cbInterfaces, javax.swing.GroupLayout.Alignment.TRAILING, 0, 427, Short.MAX_VALUE)))
+                    .addComponent(pCurrencies, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        pTerminalParametersLayout.setVerticalGroup(
+            pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pTerminalParametersLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfTerminalId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbAcqHostTimeout1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbMerchantId)
+                    .addComponent(tfMerchantId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pTerminalParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbInterfaces, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbInterface))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pCurrencies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout pGeneralLayout = new javax.swing.GroupLayout(pGeneral);
         pGeneral.setLayout(pGeneralLayout);
         pGeneralLayout.setHorizontalGroup(
@@ -267,19 +295,16 @@ public class DialogParameters extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(pGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(pAcquirerHost, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pTerminalParameters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pCurrencies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(156, Short.MAX_VALUE))
+                    .addComponent(pTerminalParameters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
         pGeneralLayout.setVerticalGroup(
             pGeneralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pGeneralLayout.createSequentialGroup()
                 .addComponent(pAcquirerHost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pTerminalParameters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pCurrencies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pTerminalParameters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(152, 152, 152))
         );
 
         tpParameters.addTab("General", pGeneral);
@@ -463,7 +488,7 @@ public class DialogParameters extends javax.swing.JDialog {
                     .addGroup(pCryptographyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(tfMasterKeyCheckValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btGenerateMasterKey)))
-                .addContainerGap(234, Short.MAX_VALUE))
+                .addContainerGap(340, Short.MAX_VALUE))
         );
 
         tpParameters.addTab("Cryptography", pCryptography);
@@ -571,6 +596,7 @@ public class DialogParameters extends javax.swing.JDialog {
             db.updateParameter(Constants.PARAM_ACQ_HOST_TIMEOUT, this.tfAcqHostTimeout.getText());
             db.updateParameter(Constants.PARAM_TERMINAL_ID, this.tfTerminalId.getText());
             db.updateParameter(Constants.PARAM_TERMINAL_MERCHANT_ID, this.tfMerchantId.getText());
+            db.updateParameter(Constants.PARAM_TERMINAL_INTERFACE_ID, ((ComboBoxItem)this.cbInterfaces.getSelectedItem()).getKey());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Failed to update parameters", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -620,6 +646,7 @@ public class DialogParameters extends javax.swing.JDialog {
     private javax.swing.JButton btOk;
     private javax.swing.JButton btRemoveCurrency;
     private javax.swing.JCheckBox cbEncryptionKeyIsUsed;
+    private javax.swing.JComboBox<ComboBoxItem> cbInterfaces;
     private javax.swing.JCheckBox cbMacKeyIsUsed;
     private javax.swing.JCheckBox cbMasterKeyIsUsed;
     private javax.swing.JCheckBox cbPinKeyIsUsed;
@@ -629,6 +656,7 @@ public class DialogParameters extends javax.swing.JDialog {
     private javax.swing.JLabel lbAcqHostTimeout;
     private javax.swing.JLabel lbAcqHostTimeout1;
     private javax.swing.JLabel lbEncryptionKey;
+    private javax.swing.JLabel lbInterface;
     private javax.swing.JLabel lbMacKey;
     private javax.swing.JLabel lbMasterKey;
     private javax.swing.JLabel lbMerchantId;

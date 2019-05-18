@@ -81,7 +81,7 @@ public class Utils {
             return str;
         }
         StringBuilder sb = new StringBuilder(str);
-        while (str.length() < length) {
+        while (sb.length() < length) {
             sb.insert(0, c);
         }
         return sb.toString();
@@ -100,6 +100,10 @@ public class Utils {
             sb.append(c);
         }
         return sb.toString();
+    }
+    
+    static String toBin (byte str) {
+        return padLeft(Integer.toBinaryString(str), '0', 8);
     }
     
     static String getDateTime () {

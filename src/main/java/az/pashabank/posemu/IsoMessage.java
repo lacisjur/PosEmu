@@ -1,15 +1,17 @@
 package az.pashabank.posemu;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class IsoMessage {
     
+    static HashMap<Integer, IsoField> isoFields;
+    
     private static final byte[] EMPTY_BMP = new byte[8];
     
-    private final IsoMessageType mti;
+    private IsoMessageType mti;
     private final SortedMap<Integer, IsoField> fields;
     
     IsoMessage (IsoMessageType mti) {
@@ -30,7 +32,7 @@ public class IsoMessage {
         for (int i = 0; i < bmp.length; i++) {
             for (int j = 0; j < 8; j++, k++) {
                 if ((bmp[i] >> (7 - j) & 1) == 1) {
-                    IsoField fld = Constants.ISO_FIELDS.get(k);
+                    IsoField fld = isoFields.get(k); //Constants.ISO_FIELDS.get(k);
                     if (fld.isVariableLength()) {
                         int valueLength = Integer.parseInt(parser.getNextToken(fld.getLengthQualifier()));
                         fld.setValue(parser.getNextToken(valueLength));
@@ -65,25 +67,24 @@ public class IsoMessage {
         for (Integer i : set) {
             IsoField field = this.fields.get(i);
             int byteIndex = field.getId() / 8;
-            int bitIndex = (field.getId() - (byteIndex * 8)) - 1;
-            bmp[byteIndex] = (byte)(bmp[byteIndex] | (1 << (bitIndex - 1)));
-            System.out.println("Field: " + field.getId() + " must be set at " + byteIndex + " - " + bitIndex);
+            if ((field.getId() % 8) == 0) {
+                byteIndex -= 1;
+            }
+            int bitIndex = (field.getId() - (byteIndex * 8) - 1);
+            bmp[byteIndex] = (byte)(bmp[byteIndex] | (1 << (7 - (bitIndex))));
             if (field.isVariableLength()) {
                 bodyFields += Utils.padLeft(field.getValue().length(), '0', field.getLengthQualifier()) + field.getValue();
             } else {
-                bodyFields += field.getValue();
+                String value = field.getValue();
+                if (field.isPadded()) {
+                    Utils.padRight(value, field.getPaddingChar().charAt(0), field.getMaxLength());
+                }
+                bodyFields += value;
             }
         }
-        byte[] bmp1 = new byte[8];
-        byte[] bmp2 = new byte[8];
-        System.arraycopy(bmp, 0, bmp1, 0, 8);
-        System.arraycopy(bmp, 8, bmp2, 0, 8);
-        message += Utils.byteArrayToHexString(bmp1);
-        if (!Arrays.equals(bmp2, EMPTY_BMP)) {
-            bodyFields = Utils.byteArrayToHexString(bmp2) + bodyFields;
-        }
-        message = message + bodyFields;
-        return message;
+        bmp[0] += (byte)128;    // extended bitmap is always in message
+        message += Utils.byteArrayToHexString(bmp);
+        return message + bodyFields;
     }
     
     private class FixedLengthStringParser {
@@ -133,6 +134,7 @@ public class IsoMessage {
         msg2.setField(4, "000000001111");
         msg2.setField(12, "160928192518");
         msg2.setField(14, "1612");
+        msg2.setField(22, "510101513344");
         msg2.setField(24, "200");
         msg2.setField(25, "2000");
         msg2.setField(26, "5166");

@@ -1,11 +1,9 @@
 package az.pashabank.posemu;
 
-import java.awt.Point;
-import java.awt.event.ActionEvent;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class DialogIsoInterfaces extends javax.swing.JDialog {
@@ -422,7 +420,7 @@ public class DialogIsoInterfaces extends javax.swing.JDialog {
             int option = JOptionPane.showConfirmDialog(this, panel, "Clone interface", JOptionPane.OK_CANCEL_OPTION);
             if (option == JOptionPane.OK_OPTION) {
                 Interface nIface = panel.getInterface();
-                List<IsoField> fields = db.getFields(oIface.getId());
+                HashMap<Integer, IsoField> fields = db.getFields(oIface.getId());
                 db.insertInterface(nIface);
                 db.insertFields(fields, id);
                 Object[] row = ifaceToRow(nIface);
@@ -463,9 +461,10 @@ public class DialogIsoInterfaces extends javax.swing.JDialog {
         }
         ComboBoxItem iface = (ComboBoxItem) this.cbIfaces.getSelectedItem();
         try {
-            List<IsoField> fields = db.getFields(Integer.valueOf(iface.getKey()));
+            HashMap<Integer, IsoField> fields = db.getFields(Integer.valueOf(iface.getKey()));
             this.tMessageFieldsModel.setRowCount(0);
-            for (IsoField field : fields) {
+            for (Integer id : fields.keySet()) {
+                IsoField field = fields.get(id);
                 Object[] row = isoFieldToRow(field);
                 this.tMessageFieldsModel.addRow(row);
             }

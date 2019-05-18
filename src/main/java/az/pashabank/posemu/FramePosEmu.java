@@ -2,10 +2,10 @@ package az.pashabank.posemu;
 
 import java.awt.Font;
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 public class FramePosEmu extends javax.swing.JFrame {
@@ -462,7 +462,9 @@ public class FramePosEmu extends javax.swing.JFrame {
         DialogParameters dlg = new DialogParameters(this, true);
         dlg.setVisible(true);
     }//GEN-LAST:event_miParametersActionPerformed
-
+    
+    private Context context;
+    
     private void btClear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClear1ActionPerformed
         // TODO add your handling code here:
 
@@ -470,6 +472,7 @@ public class FramePosEmu extends javax.swing.JFrame {
             case IDLE:
                 this.db = Database.getInstance();
                 try {
+                    this.context = new Context();
                     transaction_id = Integer.valueOf(db.getTransaction());
                     System.out.println("transaction_id=" + transaction_id);
                     db.setTransaction(Integer.toString(transaction_id));
@@ -504,12 +507,23 @@ public class FramePosEmu extends javax.swing.JFrame {
                 }
                 this.state = this.state.nextState();
                 callingHost("Operation . . . Starting . . .");                
-                Threading t1 = new Threading("HostCall");
-                t1.start();                
+                //Threading t1 = new Threading("HostCall");
+                //t1.start();
+
+ 
                 this.state = this.state.nextState();                
                 receivingAnswer();
-                Threading t2 = new Threading("ReceiveAnswer");
-                t2.start();                
+                //Threading t2 = new Threading("ReceiveAnswer");
+                //t2.start();    
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 this.state = this.state.nextState();                
                 
                 DialogReceipt dg = new DialogReceipt(this, true, String.valueOf(transaction_id));
@@ -517,6 +531,10 @@ public class FramePosEmu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btClear1ActionPerformed
 
+    private void setDisplayTextFromThread () {
+        this.taDisplay.setText("Waiting...");
+    }
+    
     private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
         // TODO add your handling code here:
 

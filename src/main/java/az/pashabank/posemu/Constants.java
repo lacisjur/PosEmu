@@ -9,6 +9,7 @@ class Constants {
     static final String PARAM_ACQ_HOST_TIMEOUT = "ACQ_HOST_TIMEOUT";
     static final String PARAM_TERMINAL_ID = "TERMINAL_ID";
     static final String PARAM_TERMINAL_MERCHANT_ID = "TERMINAL_MERCHANT_ID";
+    static final String PARAM_TERMINAL_INTERFACE_ID = "TERMINAL_INTERFCE_ID";
     static final String PARAM_PIN_KEY = "PIN_KEY";
     static final String PARAM_PIN_KEY_IS_USED = "PIN_KEY_IS_USED";
     static final String PARAM_ENCRYPTION_KEY = "ENCRYPTION_KEY";

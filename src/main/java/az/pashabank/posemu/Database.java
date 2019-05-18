@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 class Database {
@@ -184,6 +185,26 @@ class Database {
             throw new Exception("Failed to delete currency: " + e.getMessage(), e);
         }
     }
+    
+    void insertParameter(String parameter, boolean value) throws Exception {
+        insertParameter(parameter, Boolean.toString(value));
+    }
+    
+    void insertParameter(String parameter, int value) throws Exception {
+        insertParameter(parameter, Integer.toString(value));
+    }
+    
+    void insertParameter(String parameter, String value) throws Exception {
+        final String sqlStr = "INSERT INTO parameter (name, value) VALUES (?, ?)";
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, parameter);
+            sql.setString(2, value);
+            sql.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to insert parameter: " + e.getMessage(), e);
+            throw new Exception("Failed to insert parameter: " + e.getMessage(), e);
+        }
+    }
 
     void updateParameter(String parameter, boolean value) throws Exception {
         updateParameter(parameter, (value) ? 1 : 0);
@@ -204,15 +225,43 @@ class Database {
             throw new Exception("Failed to update parameter value: " + e.getMessage(), e);
         }
     }
+    
+    void deleteParameters() throws Exception {
+        final String sqlStr = "DELETE FROM parameter";
+        try (Statement sql = jdbc.createStatement()) {
+            sql.executeUpdate(sqlStr);
+        } catch (SQLException e) {
+            log.error("Failed to delete parameters: " + e.getMessage(), e);
+            throw new Exception("Failed to delete parameters: " + e.getMessage(), e);   
+        }
+    }
+    
+    void insertDefaultParameters () throws Exception {
+        deleteParameters();
+        insertParameter(Constants.PARAM_ACQ_HOST_IP_ADDRESS, "127.0.0.1");
+        insertParameter(Constants.PARAM_ACQ_HOST_PORT, 1500);
+        insertParameter(Constants.PARAM_ACQ_HOST_TIMEOUT, 30000);
+        insertParameter(Constants.PARAM_TERMINAL_ID, "POS000");
+        insertParameter(Constants.PARAM_TERMINAL_MERCHANT_ID, "1010107");
+        insertParameter(Constants.PARAM_TERMINAL_INTERFACE_ID, 1);
+        insertParameter(Constants.PARAM_PIN_KEY, "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+        insertParameter(Constants.PARAM_PIN_KEY_IS_USED, true);
+        insertParameter(Constants.PARAM_ENCRYPTION_KEY, "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+        insertParameter(Constants.PARAM_ENCRYPTION_KEY_IS_USED, false);
+        insertParameter(Constants.PARAM_MAC_KEY, "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+        insertParameter(Constants.PARAM_MAC_KEY_IS_USED, false);
+        insertParameter(Constants.PARAM_MASTER_KEY, "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+        insertParameter(Constants.PARAM_MASTER_KEY_IS_USED, false);
+    }
 
     //============================================
     // MESSAGE FIELD
     //============================================    
-    List<IsoField> getFields(int interfaceid) throws Exception {
+    HashMap<Integer, IsoField> getFields(int interfaceid) throws Exception {
         final String sqlStr = "SELECT id, name, min_length, "
                 + "max_length, length_qualifier, padding_char "
                 + "FROM message_field WHERE interface_id = ?";
-        List<IsoField> fields = new ArrayList<>();
+        HashMap<Integer, IsoField> fields = new HashMap<>();
         try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
             sql.setInt(1, interfaceid);
             try (ResultSet rs = sql.executeQuery()) {
@@ -223,7 +272,7 @@ class Database {
                             rs.getInt(4),
                             rs.getInt(5),
                             rs.getString(6));
-                    fields.add(field);
+                    fields.put(field.getId(), field);
                 }
             }
         } catch (SQLException e) {
@@ -294,7 +343,7 @@ class Database {
         insertField(38, interfaceId, "Approval code", 6);
         insertField(39, interfaceId, "Action code", 3);
         insertField(40, interfaceId, "Service code", 3);
-        insertField(41, interfaceId, "Card acceptor terminal identifier", 8);
+        insertField(41, interfaceId, "Card acceptor terminal identifier", 8, " ");
         insertField(42, interfaceId, "Card acceptor identification code", 15);
         insertField(43, interfaceId, "Card acceptor name/location", 1, 99, 2);
         insertField(44, interfaceId, "Additional response data", 1, 99, 2);
@@ -553,8 +602,9 @@ class Database {
         }
     }
 
-    void insertFields(List<IsoField> fields, int interfaceId) throws Exception {
-        for (IsoField field : fields) {
+    void insertFields(HashMap<Integer, IsoField> fields, int interfaceId) throws Exception {
+        for (Integer id : fields.keySet()) {
+            IsoField field = fields.get(id);
             insertField(field.getId(), interfaceId, field.getName(), field.getMinLength(),
                     field.getMaxLength(), field.getLengthQualifier(), field.getPaddingChar());
         }
