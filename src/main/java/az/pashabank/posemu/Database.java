@@ -753,6 +753,27 @@ class Database {
         return card;
     }
 
+    Receipt getReceipt(String trn) throws Exception {
+        final String sqlStr = "SELECT card, amount, rrn, fld_039, date FROM transactions WHERE transaction_id = ?";
+        Receipt rcp = null;
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, trn);
+            try (ResultSet rs = sql.executeQuery()) {
+                rs.next();
+                rcp = new Receipt(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5));
+            }
+        } catch (SQLException e) {
+            log.error("Failed to select receipt: " + e.getMessage(), e);
+            throw new Exception("Failed to select card: " + e.getMessage(), e);
+        }
+        return rcp;
+    }
+
+    
     void deleteCard(String pan) throws Exception {
         final String sqlStr = "DELETE FROM card WHERE card = ?";
         try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {

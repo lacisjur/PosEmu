@@ -9,18 +9,18 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
 public class FramePosEmu extends javax.swing.JFrame {
-
+    
     private Database db;
     //private final DialogEventLog dialogEventLog = new DialogEventLog(this, false);
     private EventLog log;
-
+    
     public FramePosEmu() {
         initComponents();
         screenClear();
         //this.dialogEventLog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         log = EventLog.getInstance();
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -359,7 +359,7 @@ public class FramePosEmu extends javax.swing.JFrame {
             }
         }
     }
-
+    
     private PosState state = PosState.IDLE;
     private String amount = "0.00";
     private String pin = "............";
@@ -386,49 +386,49 @@ public class FramePosEmu extends javax.swing.JFrame {
         this.taDisplay.setText(screenData);
         return null;
     }
-
+    
     private String screenEnterPin() {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n      Please enter PIN code:\n\n        " + pin;
         this.taDisplay.setText(screenData);
         return null;
     }
-
+    
     private String screenChooseTrn() {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please choose Transaction type:\n\n        1. Sales\n        2. Refund\n        3. Close POS day";
         this.taDisplay.setText(screenData);
         return null;
     }
-
+    
     private String callingHost(String par) {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please wait connected to Host\n" + "     " + par;
         this.taDisplay.setText(screenData);
         return null;
     }
-
+    
     private String receivingAnswer() {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please wait receiving answer\n\n    .... ....  ....";
         this.taDisplay.setText(screenData);
         return null;
     }
-
+    
     private String enterAmount() {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amount;
         this.taDisplay.setText(screenData);
         return null;
     }
-
+    
     private String enterCard() {
         String screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please swipe Card";
         this.taDisplay.setText(screenData);
         return null;
     }
-
+    
 
     private void numberButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberButtonActionPerformed
 
         //this.taDisplay.append(evt.getActionCommand());
         switch (this.state) {
-
+            
             case CHOOSE_TRN:
                 switch (evt.getActionCommand()) {
                     case "1":
@@ -454,7 +454,7 @@ public class FramePosEmu extends javax.swing.JFrame {
                 screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter PIN:\n\n             " + PINStr;
                 this.taDisplay.setText(screenData);
                 break;
-
+            
         }
     }//GEN-LAST:event_numberButtonActionPerformed
 
@@ -503,17 +503,16 @@ public class FramePosEmu extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Error occured while closing databaseL " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 this.state = this.state.nextState();
-                callingHost("Operation . . . Starting . . .");              
+                callingHost("Operation . . . Starting . . .");                
                 Threading t1 = new Threading("HostCall");
-                t1.start();               
-                this.state = this.state.nextState();                                          
+                t1.start();                
+                this.state = this.state.nextState();                
                 receivingAnswer();
                 Threading t2 = new Threading("ReceiveAnswer");
-                t2.start(); 
-                this.state = this.state.nextState();     
+                t2.start();                
+                this.state = this.state.nextState();                
                 
-                
-                DialogReceipt dg = new DialogReceipt(this,true);
+                DialogReceipt dg = new DialogReceipt(this, true, String.valueOf(transaction_id));
                 dg.setVisible(true);
         }
     }//GEN-LAST:event_btClear1ActionPerformed
@@ -530,7 +529,7 @@ public class FramePosEmu extends javax.swing.JFrame {
             System.out.println("Other menu");
         }
     }//GEN-LAST:event_btSharpActionPerformed
-
+    
 
     private void btClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearActionPerformed
         // TODO add your handling code here:
@@ -540,23 +539,22 @@ public class FramePosEmu extends javax.swing.JFrame {
             screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter Amount:\n\n             " + amountStr;
             this.taDisplay.setText(screenData);
         }
-
+        
         if (this.state == PosState.ENTER_PIN) {
             String PINStr = PIN.backspace();
             screenData = "\n\n\n\n\n\n\n\n\n\n\n\n    Please enter PIN:\n\n             " + PINStr;
             this.taDisplay.setText(screenData);
         }
     }//GEN-LAST:event_btClearActionPerformed
-
+    
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
-        
         if (this.state != PosState.SWIPE_CARD) {
             return;
         }
-        
+
         //ChooseCard ch = new ChooseCard(this, true);
         //ch.setVisible(true);
         try {
@@ -569,7 +567,7 @@ public class FramePosEmu extends javax.swing.JFrame {
                 db.updateTransaction(String.valueOf(transaction_id), "card", card.getCard());
                 db.updateTransaction(String.valueOf(transaction_id), "status", "Card Info Updated");
                 // JOptionPane.showMessageDialog(this, card.toString(), "Debug", JOptionPane.ERROR_MESSAGE);
-            if (this.state == PosState.SWIPE_CARD) {
+                if (this.state == PosState.SWIPE_CARD) {
                     this.state = this.state.nextState();
                     screenEnterPin();
                 }
@@ -578,7 +576,7 @@ public class FramePosEmu extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Exception: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
 
     private void miIsoMessgaeFIeldsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miIsoMessgaeFIeldsActionPerformed
         DialogIsoInterfaces dlg = new DialogIsoInterfaces(this, true);
@@ -605,7 +603,7 @@ public class FramePosEmu extends javax.swing.JFrame {
         DialogCards dlg = new DialogCards(this, true);
         dlg.setVisible(true);
     }//GEN-LAST:event_miCardsActionPerformed
-
+    
     private static void cryForHelp() {
         System.out.println("Arguments:");
         System.out.println("--help - displays help");
@@ -613,7 +611,7 @@ public class FramePosEmu extends javax.swing.JFrame {
         System.out.println("--log-level - logging level, if not provided, logging level INFO is used. "
                 + "Allowed values: NONE, ERROR, WARNING, INFO, DEBUG");
     }
-
+    
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -631,18 +629,18 @@ public class FramePosEmu extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FramePosEmu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-
+        
         FramePosEmu frame = new FramePosEmu();
-
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 frame.setVisible(true);
             }
         });
-
+        
         String dbfFile = null;
         String logLevel = null;
-
+        
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("--help")) {
                 cryForHelp();
