@@ -1,5 +1,7 @@
 package az.pashabank.posemu;
 
+import az.pashabank.posemu.emv.EmvAid;
+import az.pashabank.posemu.emv.EmvTag;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-class Database {
+public class Database {
 
     private static final String JDBC_DRIVER = "org.sqlite.JDBC";
     private static final String DEFAULT_DBF_FILE = "posemu.sqlite3";
@@ -25,18 +27,18 @@ class Database {
     private Database() {
     }
 
-    static Database getInstance() {
+    public static Database getInstance() {
         if (db == null) {
             db = new Database();
         }
         return db;
     }
 
-    void connect() throws ClassNotFoundException, FileNotFoundException, SQLException {
+    public void connect() throws ClassNotFoundException, FileNotFoundException, SQLException {
         connect(DEFAULT_DBF_FILE);
     }
 
-    void connect(String dbfFile) throws ClassNotFoundException, FileNotFoundException, SQLException {
+    public void connect(String dbfFile) throws ClassNotFoundException, FileNotFoundException, SQLException {
         Class.forName(JDBC_DRIVER);
         if (!dbfFile.equals(DEFAULT_DBF_FILE)) {
             if (!new File(dbfFile).exists()) {
@@ -48,22 +50,22 @@ class Database {
         log.info("Database " + dbfFile + " connected");
     }
 
-    void disconnect() throws SQLException {
+    public void disconnect() throws SQLException {
         if (this.jdbc != null) {
             this.jdbc.close();
         }
         log.info("Database disconnected");
     }
 
-    boolean getBooleanParameter(String parameter) throws Exception {
+    public boolean getBooleanParameter(String parameter) throws Exception {
         return Boolean.parseBoolean(getParameter(parameter));
     }
 
-    int getIntParameter(String parameter) throws Exception {
+    public int getIntParameter(String parameter) throws Exception {
         return Integer.parseInt(getParameter(parameter));
     }
 
-    String getParameter(String parameter) throws Exception {
+    public String getParameter(String parameter) throws Exception {
         String sqlStr = "SELECT value FROM parameter WHERE name = ?";
         String value = null;
         try (PreparedStatement sql = jdbc.prepareStatement(sqlStr)) {
@@ -865,7 +867,155 @@ class Database {
             throw new Exception("Failed to insert card: " + e.getMessage(), e);
         }
     }
-
+    
+    //============================================
+    // EMV 
+    //============================================
+    public List<EmvAid> getAids () 
+            throws Exception {
+        final String sqlStr = "SELECT rid, pix, name, payment_system FROM emv_aid ORDER BY rid || pix";
+        List<EmvAid> aids = new ArrayList<>();
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+            try (ResultSet rs = sql.executeQuery()) {
+                while (rs.next()) {
+                    EmvAid aid = new EmvAid(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        Constants.PaymentSystem.toPaymentSystem(rs.getInt(4)));
+                    aids.add(aid);
+                }
+            } 
+        } catch (SQLException e) {
+            log.error("Failed to select AIDs: " + e.getMessage(), e);
+            throw new Exception("Failed to select AIDs: " + e.getMessage(), e);
+        }
+        return aids;
+    }
+    
+    public EmvAid getAid (String rid, String pix) 
+            throws Exception {
+        return getAid(rid + pix);
+    }
+    
+    public EmvAid getAid (String aidId) 
+            throws Exception {
+        final String sqlStr = "SELECT rid, pix, name, payment_system FROM emv_aid WHERE rid || pix = ?";
+        EmvAid aid = null;
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, aidId);
+            try (ResultSet rs = sql.executeQuery()) {
+                rs.next();
+                aid = new EmvAid(rs.getString(1), 
+                    rs.getString(2),
+                    rs.getString(3),
+                    Constants.PaymentSystem.toPaymentSystem(rs.getInt(4)));
+            }
+        } catch (SQLException e) {
+            log.error("Failed to select AID " + aidId + ": " + e.getMessage(), e);
+            throw new Exception("Failed to select AID " + aidId + ": " + e.getMessage(), e);
+        }
+        return aid;
+    }
+    
+    public void insertAid (EmvAid aid) 
+            throws Exception {
+        final String sqlStr = "INSERT INTO emv_aid (rid, pix, name, payment_system) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+             sql.setString(1, aid.getRid());
+             sql.setString(2, aid.getPix());
+             sql.setString(3, aid.getName());
+             sql.setInt(4, aid.getPaymentSystem().getId());
+             sql.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to insert AID: " + e.getMessage(), e);
+            throw new Exception("Failed to insert AID: " + e.getMessage(), e);
+        }
+    }
+    
+    public void updateAid (EmvAid aid) 
+            throws Exception {
+        final String sqlStr = "UPDATE emv_aid SET name = ?, payment_system = ? WHERE rid = ? AND pix = ?";
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, aid.getName());
+            sql.setInt(2, aid.getPaymentSystem().getId());
+            sql.setString(3, aid.getRid());
+            sql.setString(4, aid.getPix());
+            sql.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to update AID: " + e.getMessage(), e);
+            throw new Exception("Failed to update AID: " + e.getMessage(), e);
+        }
+    }
+    
+    public void deleteAid (EmvAid aid) 
+            throws Exception {
+        final String sqlStr = "DELETE FROM emv_aid WHERE rid = ? AND pix = ?";
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, aid.getRid());
+            sql.setString(2, aid.getPix());
+            sql.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Failed to delete AID: " + e.getMessage(), e);
+            throw new Exception ("Failed to delete AID: " + e.getMessage(), e);
+        }
+    }
+    
+    //============================================
+    // EMV TAGS
+    //============================================
+    public List<EmvTag> getEmvTags () 
+            throws Exception {
+        return getEmvTags(null);
+    }
+    
+    public List<EmvTag> getEmvTags (Constants.PaymentSystem paymentSystem) 
+            throws Exception {
+        final StringBuilder sqlStr = new StringBuilder("SELECT tag, name FROM ");
+        if (paymentSystem == null) {
+            sqlStr.append("emv_tag ");
+        } else {
+            switch (paymentSystem) {
+                case VISA_INTERNATIONAL: sqlStr.append("emv_tag_visa "); break;
+                case MASTERCARD_WORLDWIDE: sqlStr.append("emv_tag_mastercard "); break;
+                case AMERICAN_EXPRESS: sqlStr.append("emv_tag_amex "); break;
+            }
+        }
+        sqlStr.append("ORDER BY tag");
+        List<EmvTag> tags = new ArrayList<>();
+        try (Statement sql = this.jdbc.createStatement()) {
+            try (ResultSet rs = sql.executeQuery(sqlStr.toString())) {
+                while (rs.next()) {
+                    tags.add(new EmvTag(rs.getString(1), rs.getString(2)));
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Failed to select EMV tags: " + e.getMessage(), e);
+            throw new Exception("Failed to select EMV tags: " + e.getMessage(), e);
+        }
+        return tags;
+    }
+    
+    //============================================
+    // EMV DATA
+    //============================================
+    public List<EmvTag> getEmvData(EmvAid aid) throws Exception {
+        String sqlStr = "SELECT a.tag, b.name FROM emv_data a JOIN emv_tag b "
+                + "ON a.tag = b.tag WHERE aid = ?";
+        List<EmvTag> tags = new ArrayList<>();
+        try (PreparedStatement sql = this.jdbc.prepareStatement(sqlStr)) {
+            sql.setString(1, aid.getAid());
+            try (ResultSet rs = sql.executeQuery()) {
+                while (rs.next()) {
+                    tags.add(new EmvTag(rs.getString(1), rs.getString(2)));
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Failed to select EMV data for " + aid.getAid() + ": " + e.getMessage(), e);
+            throw new Exception("Failed to select EMV data for " + aid.getAid() + ": " + e.getMessage(), e);
+        }
+        return tags;
+    }
+    
     //============================================
     // SYSTEM
     //============================================
@@ -886,5 +1036,169 @@ class Database {
             throw new Exception("Failed to select sequence: " + e.getMessage(), e);
         }
         return nextSequence;
+    }
+    
+    //============================================
+    // SQL
+    //============================================
+    
+    List<DbSchema> getDbSchemas () throws Exception {
+        List<DbSchema> schemas = new ArrayList<>();
+        try (Statement sql = this.jdbc.createStatement();
+                ResultSet rs = sql.executeQuery("PRAGMA database_list")) {
+            while (rs.next()) {
+                schemas.add(new DbSchema(rs.getString("name"), rs.getString("file")));
+            }
+        } catch (SQLException e) {
+            log.error("Failed to select database schemas: " + e.getMessage(), e);
+            throw new Exception("Failed to select database schemas: " + e.getMessage(), e);
+        }
+        return schemas;
+    }
+    
+    List<DbObject> getDbTables () throws Exception {
+        return getDbObjects(DbObjectType.TABLE);
+    }
+    
+    List<DbObject> getDbIndexes () throws Exception {
+        return getDbObjects(DbObjectType.INDEX);
+    }
+    
+    List<DbObject> getDbTriggers () throws Exception {
+        return getDbObjects(DbObjectType.TRIGGER);
+    }
+    
+    List<DbObject> getDbViews () throws Exception {
+        return getDbObjects(DbObjectType.VIEW);
+    }
+    
+    List<DbObject> getDbObjects () throws Exception {
+        return getDbObjects(null);
+    }
+    
+    List<DbObject> getDbObjects (DbObjectType type) throws Exception {
+        final String sqlStrAllObjects = "SELECT name, type, tbl_name, rootPage, sql FROM sqlite_master ORDER BY name";
+        final String sqlStrTypedObjects = "SELECT name, type, tbl_name, rootPage, sql FROM sqlite_master WHERE type = ? ORDER BY name";
+        List<DbObject> objects = new ArrayList<>();
+        try (PreparedStatement sql = this.jdbc.prepareStatement((type == null) ? sqlStrAllObjects : sqlStrTypedObjects)) {
+            if (type != null) {
+                sql.setString(1, type.getType());
+            }
+            try (ResultSet rs = sql.executeQuery()) {
+                while (rs.next()) {
+                    DbObject object = new DbObject(
+                            rs.getString(1),
+                            DbObjectType.toType(rs.getString(2)),
+                            rs.getString(3),
+                            rs.getInt(4),
+                            rs.getString(5)
+                    );
+                    objects.add(object);
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Failed to select database tables: " + e.getMessage(), e);
+            throw new Exception("Failed to select database objects of type " + type + ": " + e.getMessage(), e);            
+        }
+        return objects;
+    }
+    
+    class DbSchema {
+        
+        private final String name;
+        private final String fullfilePath;
+        private String file;
+        
+        DbSchema (String name, String fullFilePath) {
+            this.name = name;
+            this.fullfilePath = fullFilePath;
+            if (this.fullfilePath != null && !this.fullfilePath.isEmpty()) {
+                this.file = new File(this.fullfilePath).getName();
+            }
+        }
+        
+        String getName () {
+            return this.name;
+        }
+        
+        String getFullFilePath () {
+            return this.fullfilePath;
+        }
+        
+        String getFile () {
+            return this.file;
+        }
+    }
+    
+    enum DbObjectType {
+        TABLE(0, "table"),
+        INDEX(1, "index"),
+        TRIGGER(2, "trigger"),
+        VIEW(3, "view"),
+        UNKNOWN(99, "unknown");
+        
+        private final int value;
+        private String type;
+        
+        private DbObjectType (int value, String type) {
+            this.value = value;
+            this.type = type;
+        }
+        
+        int getValue () {
+            return this.value;
+        }
+        
+        String getType () {
+            return this.type;
+        }
+        
+        static DbObjectType toType (String type) {
+            switch (type) {
+                case "table": return TABLE;
+                case "index": return INDEX;
+                case "trigger": return TRIGGER;
+                case "view": return VIEW;
+                default: return UNKNOWN;
+            }
+        }
+    }
+    
+    class DbObject {
+        
+        private final String name;
+        private final DbObjectType type;
+        private final String tblName;
+        private final int rootPage;
+        private final String sql;
+
+        public DbObject(String name, DbObjectType type, String tblName, int rootPage, String sql) {
+            this.name = name;
+            this.type = type;
+            this.tblName = tblName;
+            this.rootPage = rootPage;
+            this.sql = sql;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public DbObjectType getType() {
+            return type;
+        }
+
+        public String getTblName() {
+            return tblName;
+        }
+
+        public int getRootPage() {
+            return rootPage;
+        }
+
+        public String getSql() {
+            return sql;
+        }
+        
     }
 }

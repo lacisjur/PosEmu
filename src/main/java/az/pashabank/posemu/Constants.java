@@ -2,26 +2,76 @@ package az.pashabank.posemu;
 
 import java.util.HashMap;
 
-class Constants {
-
-    static final String PARAM_ACQ_HOST_IP_ADDRESS = "ACQ_HOST_IP_ADDRESS";
-    static final String PARAM_ACQ_HOST_PORT = "ACQ_HOST_PORT";
-    static final String PARAM_ACQ_HOST_TIMEOUT = "ACQ_HOST_TIMEOUT";
-    static final String PARAM_TERMINAL_ID = "TERMINAL_ID";
-    static final String PARAM_TERMINAL_MERCHANT_ID = "TERMINAL_MERCHANT_ID";
-    static final String PARAM_TERMINAL_INTERFACE_ID = "TERMINAL_INTERFCE_ID";
-    static final String PARAM_PIN_KEY = "PIN_KEY";
-    static final String PARAM_PIN_KEY_IS_USED = "PIN_KEY_IS_USED";
-    static final String PARAM_ENCRYPTION_KEY = "ENCRYPTION_KEY";
-    static final String PARAM_ENCRYPTION_KEY_IS_USED = "ENCRYPTION_KEY_IS_USED";
-    static final String PARAM_MAC_KEY = "MAC_KEY";
-    static final String PARAM_MAC_KEY_IS_USED = "MAC_KEY_IS_USED";
-    static final String PARAM_MASTER_KEY = "MASTER_KEY";
-    static final String PARAM_MASTER_KEY_IS_USED = "MASTER_KEY_IS_USED";
+public class Constants {
     
-    static final String OBJECT_INTERFACE = "INTERFACE";
+    public enum PaymentSystem {
+        VISA_INTERNATIONAL(0, "Visa International"),
+        MASTERCARD_WORLDWIDE(1, "MasterCard Worlwide"),
+        AMERICAN_EXPRESS(2, "Americarn Express"),
+        UNKNOWN(9, "Unknown");
+        
+        private final int id;
+        private final String name;
+        
+        private PaymentSystem (int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+        
+        public String getName () {
+            return this.name;
+        }
+        
+        public int getId () {
+            return this.id;
+        }
+        
+        public static PaymentSystem toPaymentSystem(int id) {
+            switch (id) {
+                case 0: return VISA_INTERNATIONAL;
+                case 1: return MASTERCARD_WORLDWIDE;
+                case 2: return AMERICAN_EXPRESS;
+                default: return UNKNOWN;
+            }
+        }
+        
+        public static PaymentSystem toPaymentSystem(String name) {
+            switch (name) {
+                case "Visa International": return VISA_INTERNATIONAL;
+                case "MasterCard Worldwide": return MASTERCARD_WORLDWIDE;
+                case "American Express": return AMERICAN_EXPRESS;
+                default: return UNKNOWN;    
+            }
+        }
+    }
 
-    static final HashMap<Integer, IsoField> ISO_FIELDS = new HashMap<Integer, IsoField>();
+    public static final String PARAM_ACQ_HOST_IP_ADDRESS = "ACQ_HOST_IP_ADDRESS";
+    public static final String PARAM_ACQ_HOST_PORT = "ACQ_HOST_PORT";
+    public static final String PARAM_ACQ_HOST_TIMEOUT = "ACQ_HOST_TIMEOUT";
+    public static final String PARAM_TERMINAL_ID = "TERMINAL_ID";
+    public static final String PARAM_TERMINAL_MERCHANT_ID = "TERMINAL_MERCHANT_ID";
+    public static final String PARAM_TERMINAL_INTERFACE_ID = "TERMINAL_INTERFCE_ID";
+    public static final String PARAM_PIN_KEY = "PIN_KEY";
+    public static final String PARAM_PIN_KEY_IS_USED = "PIN_KEY_IS_USED";
+    public static final String PARAM_ENCRYPTION_KEY = "ENCRYPTION_KEY";
+    public static final String PARAM_ENCRYPTION_KEY_IS_USED = "ENCRYPTION_KEY_IS_USED";
+    public static final String PARAM_MAC_KEY = "MAC_KEY";
+    public static final String PARAM_MAC_KEY_IS_USED = "MAC_KEY_IS_USED";
+    public static final String PARAM_MASTER_KEY = "MASTER_KEY";
+    public static final String PARAM_MASTER_KEY_IS_USED = "MASTER_KEY_IS_USED";
+    
+    public static final String PARAM_EMV_HW_CONTACT_SUPPORTED = "EMV_HW_CONTACT_SUPPORTED";
+    public static final String PARAM_EMV_HW_CONTACT_READER = "EMV_HW_CONTACT_READER";
+    public static final String PARAM_EMV_HW_CONTACT_PROTOCOL = "EMV_HW_CONTACT_PROTOCOL";
+    public static final String PARAM_EMV_HW_CONTACTLESS_SUPPORTED = "EMV_HW_CONTACTLESS_SUPPORTED";
+    public static final String PARAM_EMV_HW_CONTACTLESS_READER = "EMV_HW_CONTACTLESS_READER";
+    public static final String PARAM_EMV_HW_CONTACTLESS_PROTOCOL = "EMV_HW_CONTACTLESS_PROTOCOL";
+    public static final String PARAM_EMV_PA_PERFORM_PSE_SELECTION = "EMV_PERFORM_PSE_SELECTION";
+    public static final String PARAM_EMV_PA_APPLICATION_SELECTION_SUPPORTED = "EMV_APPLICATION_SELECTION_SUPPORTED";
+    
+    public static final String OBJECT_INTERFACE = "INTERFACE";
+
+    public static final HashMap<Integer, IsoField> ISO_FIELDS = new HashMap<Integer, IsoField>();
 
     @Deprecated
     static void fillIsoFields() {

@@ -52,7 +52,7 @@ public class EventLog {
     private static DialogEventLog dialogEventLog;
     private static EventLog eventLog;
     
-    static EventLog getInstance () {
+    public static EventLog getInstance () {
         if (dialogEventLog == null) {
             dialogEventLog = new DialogEventLog(null, false);
             dialogEventLog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -65,31 +65,31 @@ public class EventLog {
         this.logLevel = logLevel;
     }
     
-    void setVisible (boolean visible) {
+    public void setVisible (boolean visible) {
         dialogEventLog.setVisible(visible);
     } 
     
-    boolean isVisible () {
+    public boolean isVisible () {
         return dialogEventLog.isVisible();
     }
     
-    void info (String msg) {
+    public void info (String msg) {
         log(LogLevel.INFO, msg);
     }
     
-    void warn (String msg) {
+    public void warn (String msg) {
         log(LogLevel.WARNING, msg);
     }
     
-    void error (String msg) {
+    public void error (String msg) {
         log(LogLevel.ERROR, msg);
     }
     
-    void error (String msg, Throwable t) {
+    public void error (String msg, Throwable t) {
         log(LogLevel.ERROR, msg, t);
     }
     
-    void debug (String msg) {
+    public void debug (String msg) {
         log(LogLevel.DEBUG, msg);
     }
     

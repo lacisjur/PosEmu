@@ -1,8 +1,8 @@
 package az.pashabank.posemu;
 
+import az.pashabank.posemu.emv.DialogEmvParameters;
 import java.awt.Font;
 import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -49,11 +49,13 @@ public class FramePosEmu extends javax.swing.JFrame {
         miEventLog = new javax.swing.JMenuItem();
         mPosEmu = new javax.swing.JMenu();
         miParameters = new javax.swing.JMenuItem();
+        miEmvParameters = new javax.swing.JMenuItem();
         miIsoMessgaeFIelds = new javax.swing.JMenuItem();
         mTools = new javax.swing.JMenu();
         miCards = new javax.swing.JMenuItem();
         miCardKeys = new javax.swing.JMenuItem();
         miCardGenerator = new javax.swing.JMenuItem();
+        miSqlClient = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -217,6 +219,14 @@ public class FramePosEmu extends javax.swing.JFrame {
         });
         mPosEmu.add(miParameters);
 
+        miEmvParameters.setText("EMV parameters");
+        miEmvParameters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miEmvParametersActionPerformed(evt);
+            }
+        });
+        mPosEmu.add(miEmvParameters);
+
         miIsoMessgaeFIelds.setText("ISO8583 message fields");
         miIsoMessgaeFIelds.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -252,6 +262,14 @@ public class FramePosEmu extends javax.swing.JFrame {
             }
         });
         mTools.add(miCardGenerator);
+
+        miSqlClient.setText("SQL client");
+        miSqlClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miSqlClientActionPerformed(evt);
+            }
+        });
+        mTools.add(miSqlClient);
 
         jMenuBar1.add(mTools);
 
@@ -621,6 +639,16 @@ public class FramePosEmu extends javax.swing.JFrame {
         DialogCards dlg = new DialogCards(this, true);
         dlg.setVisible(true);
     }//GEN-LAST:event_miCardsActionPerformed
+
+    private void miSqlClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miSqlClientActionPerformed
+        DialogSqlClient dlg = new DialogSqlClient(this, true);
+        dlg.setVisible(true);
+    }//GEN-LAST:event_miSqlClientActionPerformed
+
+    private void miEmvParametersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEmvParametersActionPerformed
+        DialogEmvParameters dlg = new DialogEmvParameters(this, true);
+        dlg.setVisible(true);
+    }//GEN-LAST:event_miEmvParametersActionPerformed
     
     private static void cryForHelp() {
         System.out.println("Arguments:");
@@ -698,10 +726,12 @@ public class FramePosEmu extends javax.swing.JFrame {
     private javax.swing.JMenuItem miCardGenerator;
     private javax.swing.JMenuItem miCardKeys;
     private javax.swing.JMenuItem miCards;
+    private javax.swing.JMenuItem miEmvParameters;
     private javax.swing.JMenuItem miEventLog;
     private javax.swing.JMenuItem miIsoMessgaeFIelds;
     private javax.swing.JMenuItem miParameters;
     private javax.swing.JMenuItem miRecreiptPrinter;
+    private javax.swing.JMenuItem miSqlClient;
     private javax.swing.JTextArea taDisplay;
     // End of variables declaration//GEN-END:variables
 }

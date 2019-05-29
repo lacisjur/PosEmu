@@ -259,7 +259,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;ComboBoxItem&gt;"/>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;az.pashabank.posemu.ComboBoxItem&gt;"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="lbKeySet">

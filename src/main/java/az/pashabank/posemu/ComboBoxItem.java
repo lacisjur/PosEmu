@@ -1,12 +1,13 @@
 package az.pashabank.posemu;
 
+@Deprecated
 public class ComboBoxItem {
 
     private final String  key;
     private final String label;
     
 
-    ComboBoxItem(String key, String label) {
+    public ComboBoxItem(String key, String label) {
         this.label = label;
         this.key = key;
     }
@@ -17,18 +18,6 @@ public class ComboBoxItem {
 
     public String getKey() {
         return key;
-    }
-    
-    @Override
-    public boolean equals (Object obj) {
-        boolean result = false;
-        if (obj instanceof ComboBoxItem) {
-            ComboBoxItem item = (ComboBoxItem)obj;
-            if (this.key == item.key) {
-                result = true;
-            }
-        }
-        return result;
     }
 
     @Override
